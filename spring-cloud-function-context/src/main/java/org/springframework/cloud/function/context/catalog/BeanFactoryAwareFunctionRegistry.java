@@ -27,7 +27,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 import org.springframework.aop.framework.ProxyFactory;
@@ -207,7 +206,7 @@ public class BeanFactoryAwareFunctionRegistry extends SimpleFunctionRegistry imp
 
 		Function wrapperFunction = message -> {
 			Object payload = ((Message) message).getPayload();
-			if (payload.getClass().getName().equals("org.springframework.kafka.support.KafkaNull")) {
+			if ("org.springframework.kafka.support.KafkaNull".equals(payload.getClass().getName())) {
 				payload = null;
 			}
 			if (userFunction instanceof BiConsumer) {
@@ -271,12 +270,7 @@ public class BeanFactoryAwareFunctionRegistry extends SimpleFunctionRegistry imp
 		ProxyFactory pf = new ProxyFactory(targetFunction);
 		pf.setProxyTargetClass(true);
 		pf.setInterfaces(Function.class);
-		pf.addAdvice(new MethodInterceptor() {
-			@Override
-			public Object invoke(MethodInvocation invocation) throws Throwable {
-				return actualMethodToCall.invoke(invocation.getThis(), invocation.getArguments());
-			}
-		});
+		pf.addAdvice(invocation -> actualMethodToCall.invoke(invocation.getThis(),invocation.getArguments()));
 		return pf.getProxy();
 	}
 }

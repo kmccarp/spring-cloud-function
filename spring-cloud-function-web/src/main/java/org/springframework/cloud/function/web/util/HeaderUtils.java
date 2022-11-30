@@ -36,18 +36,18 @@ public final class HeaderUtils {
 	 */
 	public static final String HTTP_REQUEST_PARAM = "http_request_param";
 
-	private static HttpHeaders IGNORED = new HttpHeaders();
+	private static HttpHeaders ignored = new HttpHeaders();
 
-	private static HttpHeaders REQUEST_ONLY = new HttpHeaders();
+	private static HttpHeaders requestOnly = new HttpHeaders();
 
 	static {
-		IGNORED.add(MessageHeaders.ID, "");
-		IGNORED.add(HttpHeaders.CONTENT_LENGTH, "0");
+		ignored.add(MessageHeaders.ID, "");
+		ignored.add(HttpHeaders.CONTENT_LENGTH, "0");
 		// Headers that would typically be added by a downstream client
-		REQUEST_ONLY.add(HttpHeaders.ACCEPT, "");
-		REQUEST_ONLY.add(HttpHeaders.CONTENT_LENGTH, "");
-		REQUEST_ONLY.add(HttpHeaders.CONTENT_TYPE, "");
-		REQUEST_ONLY.add(HttpHeaders.HOST, "");
+		requestOnly.add(HttpHeaders.ACCEPT, "");
+		requestOnly.add(HttpHeaders.CONTENT_LENGTH, "");
+		requestOnly.add(HttpHeaders.CONTENT_TYPE, "");
+		requestOnly.add(HttpHeaders.HOST, "");
 	}
 
 	private HeaderUtils() {
@@ -59,7 +59,7 @@ public final class HeaderUtils {
 		for (String name : headers.keySet()) {
 			Object value = headers.get(name);
 			name = name.toLowerCase();
-			if (!IGNORED.containsKey(name)) {
+			if (!ignored.containsKey(name)) {
 				Collection<?> values = multi(value);
 				for (Object object : values) {
 					result.set(name, object.toString());
@@ -74,7 +74,7 @@ public final class HeaderUtils {
 		for (String name : request.keySet()) {
 			List<String> value = request.get(name);
 			name = name.toLowerCase();
-			if (!IGNORED.containsKey(name) && !REQUEST_ONLY.containsKey(name)) {
+			if (!ignored.containsKey(name) && !requestOnly.containsKey(name)) {
 				result.put(name, value);
 			}
 		}

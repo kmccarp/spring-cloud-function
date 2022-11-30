@@ -167,7 +167,7 @@ public class FunctionEndpointInitializer implements ApplicationContextInitialize
 				ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
 				HttpServer httpServer = HttpServer.create().host(address).port(port).handle(adapter);
 				Thread thread = new Thread(
-						() -> httpServer.bindUntilJavaShutdown(Duration.ofSeconds(60), (server) -> callback(server, context)),
+						() -> httpServer.bindUntilJavaShutdown(Duration.ofSeconds(60), server -> callback(server, context)),
 						"server-startup");
 				thread.setDaemon(false);
 				thread.start();

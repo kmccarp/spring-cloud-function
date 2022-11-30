@@ -237,9 +237,7 @@ public final class GrpcUtils {
 			catch (Exception e) {
 				requestObserver.onError(e);
 			}
-		}).doOnComplete(() -> {
-			requestObserver.onCompleted();
-		}).doOnError(e -> {
+		}).doOnComplete(requestObserver::onCompleted).doOnError(e -> {
 			e.printStackTrace();
 			responseObserver.onError(Status.UNKNOWN.withDescription("Error handling request")
 					.withCause(e).asRuntimeException());
@@ -265,21 +263,16 @@ public final class GrpcUtils {
 				this.requestStreamObserver = requestStreamObserver;
 				requestStreamObserver.disableAutoInboundFlowControl();
 
-				requestStreamObserver.setOnReadyHandler(new Runnable() {
-					@Override
-					public void run() {
-						inputStream
-						.doOnNext(request -> {
-							if (logger.isDebugEnabled()) {
-								logger.debug("Streaming message to function: " + request);
-							}
-							requestStreamObserver.onNext(GrpcUtils.toGrpcSpringMessage(request));
-						})
-						.doOnComplete(() -> {
-							requestStreamObserver.onCompleted();
-						})
-						.subscribe();
-					}
+				requestStreamObserver.setOnReadyHandler(() -> {
+					inputStream
+							.doOnNext(request -> {
+								if (logger.isDebugEnabled()) {
+									logger.debug("Streaming message to function: " + request);
+								}
+								requestStreamObserver.onNext(GrpcUtils.toGrpcSpringMessage(request));
+							})
+							.doOnComplete(requestStreamObserver::onCompleted)
+							.subscribe();
 				});
 			}
 

@@ -16,8 +16,6 @@
 
 package org.springframework.cloud.function.web.source;
 
-import java.util.function.Supplier;
-
 import org.springframework.boot.web.reactive.context.ConfigurableReactiveWebEnvironment;
 import org.springframework.boot.web.reactive.context.ReactiveWebApplicationContext;
 import org.springframework.cloud.function.context.FunctionCatalog;
@@ -52,12 +50,7 @@ class FunctionExporterInitializer implements ApplicationContextInitializer<Gener
 		if (ClassUtils.isPresent("org.springframework.web.reactive.function.client.WebClient",
 				getClass().getClassLoader())) {
 			if (context.getBeanFactory().getBeanNamesForType(WebClient.Builder.class, false, false).length == 0) {
-				context.registerBean(WebClient.Builder.class, new Supplier<WebClient.Builder>() {
-					@Override
-					public Builder get() {
-						return WebClient.builder();
-					}
-				});
+				context.registerBean(WebClient.Builder.class, WebClient::builder);
 			}
 		}
 	}

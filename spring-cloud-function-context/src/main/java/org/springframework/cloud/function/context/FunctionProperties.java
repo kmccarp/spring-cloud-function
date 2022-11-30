@@ -43,17 +43,17 @@ public class FunctionProperties implements EnvironmentAware, ApplicationContextA
 	/**
 	 * The name prefix for properties defined by this properties class.
 	 */
-	public final static String PREFIX = "spring.cloud.function";
+	public static final String PREFIX = "spring.cloud.function";
 
 	/**
 	 * Name of the header to be used to instruct function to apply this content type for output conversion.
 	 */
-	public final static String EXPECT_CONTENT_TYPE_HEADER = "expected-content-type";
+	public static final String EXPECT_CONTENT_TYPE_HEADER = "expected-content-type";
 
 	/**
 	 * The name of function definition property.
 	 */
-	public final static String FUNCTION_DEFINITION = PREFIX + ".definition";
+	public static final String FUNCTION_DEFINITION = PREFIX + ".definition";
 
 	/**
 	 * Definition of the function to be used. This could be function name (e.g., 'myFunction')

@@ -73,11 +73,11 @@ public class FunctionInvoker<I, O> {
 
 	private static String EXECUTION_CONTEXT = "executionContext";
 
-	private static FunctionCatalog FUNCTION_CATALOG;
+	private static FunctionCatalog functionCatalog;
 
-	private static ConfigurableApplicationContext APPLICATION_CONTEXT;
+	private static ConfigurableApplicationContext applicationContext;
 
-	private static JsonMapper OBJECT_MAPPER;
+	private static JsonMapper objectMapper;
 
 	public FunctionInvoker(Class<?> configurationClass) {
 		try {
@@ -98,7 +98,7 @@ public class FunctionInvoker<I, O> {
 	}
 
 	public void close() {
-		FUNCTION_CATALOG = null;
+		functionCatalog = null;
 	}
 
 	public void handleOutput(I input, OutputBinding<O> binding,
@@ -108,14 +108,14 @@ public class FunctionInvoker<I, O> {
 	}
 
 	private FunctionInvocationWrapper discoverFunction(String functionDefinition) {
-		FunctionInvocationWrapper function = FUNCTION_CATALOG.lookup(functionDefinition);
+		FunctionInvocationWrapper function = functionCatalog.lookup(functionDefinition);
 		if (function != null && StringUtils.hasText(functionDefinition) && !function.getFunctionDefinition().equals(functionDefinition)) {
 			this.registerFunction(functionDefinition);
-			function = FUNCTION_CATALOG.lookup(functionDefinition);
+			function = functionCatalog.lookup(functionDefinition);
 		}
-		else if (function == null && StringUtils.hasText(functionDefinition) && APPLICATION_CONTEXT.containsBean(functionDefinition)) {
+		else if (function == null && StringUtils.hasText(functionDefinition) && applicationContext.containsBean(functionDefinition)) {
 			this.registerFunction(functionDefinition);
-			function = FUNCTION_CATALOG.lookup(functionDefinition);
+			function = functionCatalog.lookup(functionDefinition);
 		}
 		return function;
 	}
@@ -237,16 +237,16 @@ public class FunctionInvoker<I, O> {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void registerFunction(String functionDefinition) {
-		if (APPLICATION_CONTEXT.containsBean(functionDefinition)) {
+		if (applicationContext.containsBean(functionDefinition)) {
 			FunctionRegistration functionRegistration =
-					new FunctionRegistration(APPLICATION_CONTEXT.getBean(functionDefinition), functionDefinition);
+					new FunctionRegistration(applicationContext.getBean(functionDefinition), functionDefinition);
 
 			Type type = FunctionContextUtils.
-					findType(functionDefinition, APPLICATION_CONTEXT.getBeanFactory());
+					findType(functionDefinition, applicationContext.getBeanFactory());
 
 			functionRegistration = functionRegistration.type(type);
 
-			((FunctionRegistry) FUNCTION_CATALOG).register(functionRegistration);
+			((FunctionRegistry) functionCatalog).register(functionRegistration);
 		}
 	}
 
@@ -271,9 +271,7 @@ public class FunctionInvoker<I, O> {
 					.setHeaderIfAbsent(EXECUTION_CONTEXT, executionContext).build();
 		}
 		else if (input instanceof Iterable) {
-			return Flux.fromIterable((Iterable) input).map(item -> {
-				return constructInputMessageFromItem(item, executionContext);
-			});
+			return Flux.fromIterable((Iterable) input).map(item -> constructInputMessageFromItem(item, executionContext));
 		}
 		return constructInputMessageFromItem(input, executionContext);
 	}
@@ -321,7 +319,7 @@ public class FunctionInvoker<I, O> {
 	}
 
 	private MessageHeaders getHeaders(HttpRequestMessage<I> event) {
-		Map<String, Object> headers = new HashMap<String, Object>();
+		Map<String, Object> headers = new HashMap<>();
 
 		if (event.getHeaders() != null) {
 			headers.putAll(event.getHeaders());
@@ -343,22 +341,22 @@ public class FunctionInvoker<I, O> {
 
 	private static void initialize(Class<?> configurationClass) {
 		synchronized (FunctionInvoker.class.getName()) {
-			if (FUNCTION_CATALOG == null) {
+			if (functionCatalog == null) {
 				logger.info("Initializing: " + configurationClass);
 				SpringApplication builder = springApplication(configurationClass);
-				APPLICATION_CONTEXT = builder.run();
+				applicationContext = builder.run();
 
-				Map<String, FunctionCatalog> mf = APPLICATION_CONTEXT.getBeansOfType(FunctionCatalog.class);
+				Map<String, FunctionCatalog> mf = applicationContext.getBeansOfType(FunctionCatalog.class);
 				if (CollectionUtils.isEmpty(mf)) {
-					OBJECT_MAPPER = new JacksonMapper(new ObjectMapper());
-					JsonMessageConverter jsonConverter = new JsonMessageConverter(OBJECT_MAPPER);
+					objectMapper = new JacksonMapper(new ObjectMapper());
+					JsonMessageConverter jsonConverter = new JsonMessageConverter(objectMapper);
 					SmartCompositeMessageConverter messageConverter = new SmartCompositeMessageConverter(Collections.singletonList(jsonConverter));
-					FUNCTION_CATALOG = new SimpleFunctionRegistry(APPLICATION_CONTEXT.getBeanFactory().getConversionService(),
-							messageConverter, OBJECT_MAPPER);
+					functionCatalog = new SimpleFunctionRegistry(applicationContext.getBeanFactory().getConversionService(),
+							messageConverter, objectMapper);
 				}
 				else {
-					OBJECT_MAPPER = APPLICATION_CONTEXT.getBean(JsonMapper.class);
-					FUNCTION_CATALOG = mf.values().iterator().next();
+					objectMapper = applicationContext.getBean(JsonMapper.class);
+					functionCatalog = mf.values().iterator().next();
 				}
 			}
 		}

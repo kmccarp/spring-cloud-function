@@ -307,7 +307,7 @@ public final class CloudEventMessageUtils {
 				Object value = headers.remove(key);
 				String newKey = DEFAULT_ATTR_PREFIX + key.substring(DEFAULT_ATTR_PREFIX.length());
 				headers.put(newKey, value);
-				modified |= (!Objects.equals(key, newKey));
+				modified |= !Objects.equals(key, newKey);
 			}
 			else if (key.startsWith(KAFKA_ATTR_PREFIX)) {
 				Object value = headers.remove(key);

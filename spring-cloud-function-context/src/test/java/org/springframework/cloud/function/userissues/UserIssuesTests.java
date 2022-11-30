@@ -48,8 +48,7 @@ public class UserIssuesTests {
 	private FunctionCatalog configureCatalog(Class<?>... configClass) {
 		ApplicationContext context = new SpringApplicationBuilder(configClass).run(
 				"--logging.level.org.springframework.cloud.function=DEBUG", "--spring.main.lazy-initialization=true");
-		FunctionCatalog catalog = context.getBean(FunctionCatalog.class);
-		return catalog;
+		return context.getBean(FunctionCatalog.class);
 	}
 
 	@BeforeEach
@@ -62,7 +61,7 @@ public class UserIssuesTests {
 		FunctionCatalog catalog = this.configureCatalog(Issue602Configuration.class);
 		Function<Message<String>, Integer> function = catalog.lookup("consumer");
 		int result = function.apply(
-				new GenericMessage<String>("[{\"name\":\"julien\"},{\"name\":\"ricky\"},{\"name\":\"bubbles\"}]"));
+				new GenericMessage<>("[{\"name\":\"julien\"},{\"name\":\"ricky\"},{\"name\":\"bubbles\"}]"));
 		assertThat(result).isEqualTo(3);
 	}
 
@@ -80,7 +79,7 @@ public class UserIssuesTests {
 		p = new Product();
 		p.setName("bubbles");
 		products.add(p);
-		int result = function.apply(new GenericMessage<List<Product>>(products));
+		int result = function.apply(new GenericMessage<>(products));
 		assertThat(result).isEqualTo(3);
 
 	}
@@ -93,7 +92,7 @@ public class UserIssuesTests {
 		products.add("{\"name\":\"julien\"}");
 		products.add("{\"name\":\"ricky\"}");
 		products.add("{\"name\":\"bubbles\"}");
-		int result = function.apply(new GenericMessage<List<String>>(products));
+		int result = function.apply(new GenericMessage<>(products));
 		assertThat(result).isEqualTo(3);
 
 	}

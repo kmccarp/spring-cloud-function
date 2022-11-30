@@ -111,7 +111,7 @@ public class MessageHandlingHelper<T extends GeneratedMessageV3> implements Smar
 		Flux.from(replyStream).doOnNext(replyMessage -> {
 			responseObserver.onNext(this.toGrpcMessage(replyMessage, (Class<T>) request.getClass()));
 		})
-		.doOnComplete(() -> responseObserver.onCompleted())
+		.doOnComplete(responseObserver::onCompleted)
 		.subscribe();
 	}
 

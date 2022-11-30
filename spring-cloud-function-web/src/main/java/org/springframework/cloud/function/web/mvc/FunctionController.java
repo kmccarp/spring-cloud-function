@@ -74,9 +74,7 @@ public class FunctionController {
 				Publisher<?> result = (Publisher<?>) function.apply(Flux.fromIterable(files));
 				BodyBuilder builder = ResponseEntity.ok();
 				if (result instanceof Flux) {
-					result = Flux.from(result).map(message -> {
-						return message instanceof Message ? ((Message<?>) message).getPayload() : message;
-					}).collectList();
+					result = Flux.from(result).map(message -> message instanceof Message ? ((Message<?>) message).getPayload() : message).collectList();
 				}
 				return Mono.from(result).flatMap(body -> Mono.just(builder.body(body)));
 			}

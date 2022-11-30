@@ -127,9 +127,7 @@ public final class FunctionWebRequestProcessingHelper {
 
 		return Mono.from(pResult).map(v -> {
 			if (v instanceof Iterable) {
-				List aggregatedResult = (List) ((Collection) v).stream().map(m -> {
-					return m instanceof Message ? processMessage(responseOkBuilder, (Message<?>) m) : m;
-				}).collect(Collectors.toList());
+				List aggregatedResult = (List) ((Collection) v).stream().map(m -> m instanceof Message ? processMessage(responseOkBuilder, (Message<?>) m) : m).collect(Collectors.toList());
 				return responseOkBuilder.header("content-type", "application/json").body(aggregatedResult);
 			}
 			else if (v instanceof Message) {

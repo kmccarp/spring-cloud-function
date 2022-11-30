@@ -125,9 +125,7 @@ public class SupplierExporter implements SmartLifecycle {
 //						return retry;
 //					}
 //					)
-					.doOnComplete(() -> {
-						stop();
-					})
+					.doOnComplete(this::stop)
 					.subscribe();
 
 			this.ok = true;

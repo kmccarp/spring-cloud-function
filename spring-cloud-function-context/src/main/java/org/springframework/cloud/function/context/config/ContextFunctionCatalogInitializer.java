@@ -121,7 +121,7 @@ public class ContextFunctionCatalogInitializer implements ApplicationContextInit
 			if (this.context.getBeanFactory().getBeanNamesForType(PropertySourcesPlaceholderConfigurer.class, false,
 					false).length == 0) {
 				this.context.registerBean(PropertySourcesPlaceholderConfigurer.class,
-						() -> PropertyPlaceholderAutoConfiguration.propertySourcesPlaceholderConfigurer());
+						PropertyPlaceholderAutoConfiguration::propertySourcesPlaceholderConfigurer);
 			}
 
 			if (!this.context.getBeanFactory()
