@@ -90,6 +90,7 @@
 		</dependency>
 		
 		<dependency>
+			<version>6.0.0</version>
 			<!-- Spring Boot autoconfiguration needs this to be able to create a Jackson
 				ObjectMapper -->
 			<groupId>org.springframework</groupId>
