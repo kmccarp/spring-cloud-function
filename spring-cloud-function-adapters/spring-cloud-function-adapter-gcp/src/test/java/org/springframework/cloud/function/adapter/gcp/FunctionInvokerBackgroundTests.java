@@ -144,7 +144,7 @@ public class FunctionInvokerBackgroundTests {
 
 		@Bean
 		public Function<IncomingRequest, String> function() {
-			return (in) -> "Thank you for sending the message: " + in.message;
+			return in -> "Thank you for sending the message: " + in.message;
 		}
 
 	}
@@ -155,7 +155,7 @@ public class FunctionInvokerBackgroundTests {
 
 		@Bean
 		public Function<IncomingRequest, Message<OutgoingResponse>> function() {
-			return (in) -> MessageBuilder
+			return in -> MessageBuilder
 					.withPayload(new OutgoingResponse("Thank you for sending the message: " + in.message))
 					.setHeader("foo", "bar").build();
 		}
@@ -168,7 +168,7 @@ public class FunctionInvokerBackgroundTests {
 
 		@Bean
 		public Consumer<IncomingRequest> function() {
-			return (in) -> System.out.println("Thank you for sending the message: " + in.message);
+			return in -> System.out.println("Thank you for sending the message: " + in.message);
 		}
 
 	}
@@ -179,7 +179,7 @@ public class FunctionInvokerBackgroundTests {
 
 		@Bean
 		public Consumer<PubSubMessage> consumer() {
-			return (in) -> System.out.println("Thank you for sending the message: " + in.getData());
+			return in -> System.out.println("Thank you for sending the message: " + in.getData());
 		}
 
 	}
@@ -190,7 +190,7 @@ public class FunctionInvokerBackgroundTests {
 
 		@Bean
 		public Consumer<IncomingRequest> consumerPayload() {
-			return (in) -> System.out.println("Thank you for sending the message: " + in.message);
+			return in -> System.out.println("Thank you for sending the message: " + in.message);
 		}
 
 		@Bean
@@ -218,7 +218,7 @@ public class FunctionInvokerBackgroundTests {
 
 		@Bean
 		public Consumer<Message<String>> consumeStringMessage(JsonMapper mapper) {
-			return (message) -> {
+			return message -> {
 				PubSubMessage pubSubMessage = mapper.fromJson(message.getPayload(), PubSubMessage.class);
 				String payload = pubSubMessage.getData();
 
@@ -235,7 +235,7 @@ public class FunctionInvokerBackgroundTests {
 
 		@Bean
 		public Consumer<Message<PubSubMessage>> consumePubSubMessage() {
-			return (message) -> {
+			return message -> {
 				String payload = message.getPayload().getData();
 				String eventType = ((Context) message.getHeaders().get("gcf_context")).eventType();
 				String messageId = message.getPayload().getMessageId();

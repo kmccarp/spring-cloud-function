@@ -98,7 +98,7 @@ public class FunctionInvokerIntegrationTests {
 
 		@Bean
 		Function<String, String> uppercase() {
-			return input -> input.toUpperCase();
+			return String::toUpperCase;
 		}
 
 	}
@@ -109,7 +109,7 @@ public class FunctionInvokerIntegrationTests {
 
 		@Bean
 		Function<String, String> uppercase() {
-			return input -> input.toUpperCase();
+			return String::toUpperCase;
 		}
 
 		@Bean

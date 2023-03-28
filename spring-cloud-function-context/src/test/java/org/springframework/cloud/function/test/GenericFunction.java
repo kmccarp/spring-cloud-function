@@ -32,8 +32,8 @@ public class GenericFunction {
 
 	@Bean
 	public Function<Map<String, String>, Map<String, String>> function() {
-		return m -> m.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(),
-				e -> e.getValue().toString().toUpperCase()));
+		return m -> m.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
+				e -> e.getValue().toUpperCase()));
 	}
 
 }

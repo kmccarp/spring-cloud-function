@@ -69,7 +69,7 @@ public class UserSubmittedTests {
 
 		@Bean
 		public Function<String, String> echo() {
-			return s -> s.toUpperCase();
+			return String::toUpperCase;
 		}
 	}
 

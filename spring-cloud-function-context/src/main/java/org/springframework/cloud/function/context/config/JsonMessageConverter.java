@@ -60,18 +60,12 @@ public class JsonMessageConverter extends AbstractMessageConverter {
 
 	@Override
 	protected boolean canConvertTo(Object payload, @Nullable MessageHeaders headers) {
-		if (!supportsMimeType(headers)) {
-			return false;
-		}
-		return true;
+		return supportsMimeType(headers);
 	}
 
 	@Override
 	protected boolean canConvertFrom(Message<?> message, @Nullable Class<?> targetClass) {
-		if (targetClass == null || !supportsMimeType(message.getHeaders())) {
-			return false;
-		}
-		return true;
+		return !(targetClass == null || !supportsMimeType(message.getHeaders()));
 	}
 
 	@Override

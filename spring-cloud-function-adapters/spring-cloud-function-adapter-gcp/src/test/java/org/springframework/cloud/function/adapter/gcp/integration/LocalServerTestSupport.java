@@ -50,7 +50,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Mike Eltsufin
  * @author Chris Bono
  */
-final public class LocalServerTestSupport {
+public final class LocalServerTestSupport {
 
 	private static final Gson gson = new Gson();
 

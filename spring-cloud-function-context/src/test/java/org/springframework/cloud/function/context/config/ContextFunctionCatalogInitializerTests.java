@@ -235,7 +235,7 @@ public class ContextFunctionCatalogInitializerTests {
 
 		@Bean
 		public Function<String, String> function() {
-			return value -> value.toUpperCase();
+			return String::toUpperCase;
 		}
 
 	}
@@ -243,7 +243,7 @@ public class ContextFunctionCatalogInitializerTests {
 	protected static class SimpleConfiguration
 			implements ApplicationContextInitializer<GenericApplicationContext> {
 
-		private List<String> list = new ArrayList<>();
+		private final List<String> list = new ArrayList<>();
 
 
 		@Override
@@ -276,7 +276,7 @@ public class ContextFunctionCatalogInitializerTests {
 
 		@Bean
 		public Consumer<String> consumer() {
-			return value -> this.list.add(value);
+			return this.list::add;
 		}
 	}
 
@@ -331,7 +331,7 @@ public class ContextFunctionCatalogInitializerTests {
 	protected static class GsonConfiguration
 			implements ApplicationContextInitializer<GenericApplicationContext> {
 
-		private Gson gson = new Gson();
+		private final Gson gson = new Gson();
 
 		@Override
 		public void initialize(GenericApplicationContext context) {
@@ -351,7 +351,7 @@ public class ContextFunctionCatalogInitializerTests {
 
 		@Override
 		public void initialize(GenericApplicationContext context) {
-			context.registerBean(String.class, () -> value());
+			context.registerBean(String.class, this::value);
 			context.registerBean("foos", FunctionRegistration.class,
 					() -> new FunctionRegistration<>(foos(context.getBean(String.class)))
 							.type(FunctionTypeUtils.functionType(String.class, Foo.class)));

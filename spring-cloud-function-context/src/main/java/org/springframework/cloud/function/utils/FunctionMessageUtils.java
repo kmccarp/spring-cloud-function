@@ -59,7 +59,7 @@ public final class FunctionMessageUtils {
 			else if (key.startsWith("solace_")) {
 				return "solace";
 			}
-			else if (key.toLowerCase().equals("user-agent") || key.toLowerCase().equals("accept-encoding") || key.toLowerCase().equals("host")) {
+			else if ("user-agent".equals(key.toLowerCase()) || "accept-encoding".equals(key.toLowerCase()) || "host".equals(key.toLowerCase())) {
 				return "http";
 			}
 			// add rsocket

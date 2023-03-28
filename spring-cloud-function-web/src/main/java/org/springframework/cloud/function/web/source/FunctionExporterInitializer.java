@@ -16,8 +16,6 @@
 
 package org.springframework.cloud.function.web.source;
 
-import java.util.function.Supplier;
-
 import org.springframework.boot.web.reactive.context.ConfigurableReactiveWebEnvironment;
 import org.springframework.boot.web.reactive.context.ReactiveWebApplicationContext;
 import org.springframework.cloud.function.context.FunctionCatalog;
@@ -52,12 +50,7 @@ class FunctionExporterInitializer implements ApplicationContextInitializer<Gener
 		if (ClassUtils.isPresent("org.springframework.web.reactive.function.client.WebClient",
 				getClass().getClassLoader())) {
 			if (context.getBeanFactory().getBeanNamesForType(WebClient.Builder.class, false, false).length == 0) {
-				context.registerBean(WebClient.Builder.class, new Supplier<WebClient.Builder>() {
-					@Override
-					public Builder get() {
-						return WebClient.builder();
-					}
-				});
+				context.registerBean(WebClient.Builder.class, WebClient::builder);
 			}
 		}
 	}
@@ -80,7 +73,7 @@ class FunctionExporterInitializer implements ApplicationContextInitializer<Gener
 	}
 
 	private void registerExport(GenericApplicationContext context) {
-		context.registerBean(ExporterProperties.class, () -> new ExporterProperties());
+		context.registerBean(ExporterProperties.class, ExporterProperties::new);
 		context.registerBean(FunctionExporterAutoConfiguration.class,
 				() -> new FunctionExporterAutoConfiguration(context.getBean(ExporterProperties.class)));
 		if (context.getBeanFactory().getBeanNamesForType(DestinationResolver.class, false, false).length == 0) {

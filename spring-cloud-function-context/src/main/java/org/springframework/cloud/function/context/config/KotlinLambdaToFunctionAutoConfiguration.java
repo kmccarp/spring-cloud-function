@@ -67,11 +67,8 @@ public class KotlinLambdaToFunctionAutoConfiguration {
 	@ConditionalOnClass(name = {"org.springframework.http.converter.json.Jackson2ObjectMapperBuilder",
 			"com.fasterxml.jackson.module.kotlin.KotlinModule"})
 	Jackson2ObjectMapperBuilderCustomizer customizer() {
-		return new Jackson2ObjectMapperBuilderCustomizer() {
-			@Override
-			public void customize(Jackson2ObjectMapperBuilder jacksonObjectMapperBuilder) {
-				jacksonObjectMapperBuilder.modulesToInstall(KotlinModule.class);
-			}
+		return jacksonObjectMapperBuilder -> {
+			jacksonObjectMapperBuilder.modulesToInstall(KotlinModule.class);
 		};
 	}
 

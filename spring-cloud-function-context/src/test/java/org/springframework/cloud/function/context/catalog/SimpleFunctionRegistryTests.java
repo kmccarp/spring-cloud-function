@@ -595,12 +595,12 @@ public class SimpleFunctionRegistryTests {
 	}
 
 	public Function<String, String> uppercase() {
-		return v -> v.toUpperCase();
+		return String::toUpperCase;
 	}
 
 
 	public Function<Object, Integer> hash() {
-		return v -> v.hashCode();
+		return Object::hashCode;
 	}
 
 	public Supplier<Integer> supplier() {
@@ -612,16 +612,14 @@ public class SimpleFunctionRegistryTests {
 	}
 
 	public Consumer<Flux<Integer>> reactiveConsumer() {
-		return flux -> flux.subscribe(v -> {
-			System.out.println(v);
-		});
+		return flux -> flux.subscribe(System.out::println);
 	}
 
 	private final AtomicInteger consumerDowncounter = new AtomicInteger(10);
 
 	public Supplier<Flux<String>> reactiveFluxSupplier() {
 		return () -> Flux.fromStream(
-			IntStream.range(0, consumerDowncounter.get()).boxed().map(i -> Integer.toString(i))
+			IntStream.range(0, consumerDowncounter.get()).boxed().map(Integer::toString)
 		);
 	}
 
@@ -633,8 +631,7 @@ public class SimpleFunctionRegistryTests {
 		ApplicationContext context = new SpringApplicationBuilder(configClass)
 				.run("--logging.level.org.springframework.cloud.function=DEBUG",
 						"--spring.main.lazy-initialization=true");
-		FunctionCatalog catalog = context.getBean(FunctionCatalog.class);
-		return catalog;
+		return context.getBean(FunctionCatalog.class);
 	}
 
 	@EnableAutoConfiguration
@@ -675,7 +672,7 @@ public class SimpleFunctionRegistryTests {
 
 		@Bean
 		public Function<Person, String> func() {
-			return person -> person.getName();
+			return SimpleFunctionRegistryTests.Person::getName;
 		}
 	}
 

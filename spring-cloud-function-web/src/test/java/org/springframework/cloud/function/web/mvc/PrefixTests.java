@@ -90,7 +90,7 @@ public class PrefixTests {
 		@Bean
 		public Function<Message<String>, String[]> uppercase() {
 			return message -> {
-				assertThat(message.getPayload().equals("foo"));
+				assertThat("foo".equals(message.getPayload()));
 				Map<String, String> httpParam = (Map<String, String>) message.getHeaders().get(HeaderUtils.HTTP_REQUEST_PARAM);
 				assertThat(httpParam.get("nome")).isEqualTo("Doe");
 				assertThat(httpParam.get("prenome")).isEqualTo("John");
