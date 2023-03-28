@@ -36,9 +36,9 @@ class SimpleRequestBuilder implements RequestBuilder {
 
 	private String baseUrl = "http://${destination}";
 
-	private Map<String, String> headers = new LinkedHashMap<>();
+	private final Map<String, String> headers = new LinkedHashMap<>();
 
-	private Environment environment;
+	private final Environment environment;
 
 	SimpleRequestBuilder(Environment environment) {
 		this.environment = environment;

@@ -26,6 +26,8 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class FunctionUnregistrationEvent extends FunctionCatalogEvent {
 
+	private static final long serialVersionUID = 1;
+
 	private final Class<?> type;
 
 	private final Set<String> names;

@@ -110,7 +110,7 @@ public class CustomRuntimeEventLoopTest {
 	protected static class SingleFunctionConfiguration {
 		@Bean
 		public Function<String, String> uppercase() {
-			return v -> v.toUpperCase();
+			return String::toUpperCase;
 		}
 	}
 
@@ -119,7 +119,7 @@ public class CustomRuntimeEventLoopTest {
 	protected static class MultipleFunctionConfiguration {
 		@Bean
 		public Function<String, String> uppercase() {
-			return v -> v.toUpperCase();
+			return String::toUpperCase;
 		}
 
 		@Bean

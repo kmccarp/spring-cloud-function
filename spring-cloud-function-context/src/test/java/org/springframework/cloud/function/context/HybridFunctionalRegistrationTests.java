@@ -118,7 +118,7 @@ public class HybridFunctionalRegistrationTests {
 
 		@Override
 		public Flux<String> apply(Flux<String> flux) {
-			return flux.map(v -> v.toUpperCase());
+			return flux.map(String::toUpperCase);
 		}
 
 

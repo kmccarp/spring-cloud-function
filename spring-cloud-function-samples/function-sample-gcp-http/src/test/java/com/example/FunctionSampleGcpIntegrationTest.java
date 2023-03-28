@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FunctionSampleGcpIntegrationTest {
 
-	private TestRestTemplate rest = new TestRestTemplate();
+	private final TestRestTemplate rest = new TestRestTemplate();
 
 	@Test
 	public void testSample() throws IOException, InterruptedException {

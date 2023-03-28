@@ -38,7 +38,7 @@ public class SampleApplication {
 
 	@Bean
 	public Function<String, String> uppercase() {
-		return value -> value.toUpperCase();
+		return String::toUpperCase;
 	}
 
 	@Bean
@@ -48,7 +48,7 @@ public class SampleApplication {
 
 	@Bean
 	public Function<Flux<String>, Flux<String>> lowercase() {
-		return flux -> flux.map(value -> value.toLowerCase());
+		return flux -> flux.map(String::toLowerCase);
 	}
 
 	@Bean

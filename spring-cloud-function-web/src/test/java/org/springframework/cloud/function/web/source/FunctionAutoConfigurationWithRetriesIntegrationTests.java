@@ -96,7 +96,7 @@ public class FunctionAutoConfigurationWithRetriesIntegrationTests {
 
 		@Bean
 		public Function<String, String> uppercase() {
-			return value -> value.toUpperCase();
+			return String::toUpperCase;
 		}
 
 	}

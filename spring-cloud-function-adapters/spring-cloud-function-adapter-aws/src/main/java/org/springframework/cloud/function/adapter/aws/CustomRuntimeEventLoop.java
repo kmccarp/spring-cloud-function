@@ -63,7 +63,7 @@ import static org.apache.http.HttpHeaders.USER_AGENT;
  */
 public final class CustomRuntimeEventLoop implements SmartLifecycle {
 
-	private static Log logger = LogFactory.getLog(CustomRuntimeEventLoop.class);
+	private static final Log logger = LogFactory.getLog(CustomRuntimeEventLoop.class);
 
 	static final String LAMBDA_VERSION_DATE = "2018-06-01";
 	private static final String LAMBDA_ERROR_URL_TEMPLATE = "http://{0}/{1}/runtime/invocation/{2}/error";
@@ -78,7 +78,7 @@ public final class CustomRuntimeEventLoop implements SmartLifecycle {
 
 	private volatile boolean running;
 
-	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public CustomRuntimeEventLoop(ConfigurableApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;

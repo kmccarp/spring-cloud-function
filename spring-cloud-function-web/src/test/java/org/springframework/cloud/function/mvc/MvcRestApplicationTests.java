@@ -337,7 +337,7 @@ public class MvcRestApplicationTests {
 		@ResponseStatus(HttpStatus.ACCEPTED)
 		public Flux<?> updates(@RequestBody List<String> list) {
 			Flux<String> flux = Flux.fromIterable(list).cache();
-			flux.subscribe(value -> this.list.add(value));
+			flux.subscribe(this.list::add);
 			return flux;
 		}
 
@@ -352,7 +352,7 @@ public class MvcRestApplicationTests {
 		@GetMapping("/bang")
 		public Flux<?> bang() {
 			return Flux.fromArray(new String[] { "foo", "bar" }).map(value -> {
-				if (value.equals("bar")) {
+				if ("bar".equals(value)) {
 					throw new RuntimeException("Bar");
 				}
 				return value;

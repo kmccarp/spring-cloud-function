@@ -111,6 +111,7 @@ public class FunctionHandlerMapping extends RequestMappingHandlerMapping
 
 	@SuppressWarnings("serial")
 	private static class HttpRequestAttributeDelegate extends HashMap<String, Object> {
+		private static final long serialVersionUID = 1;
 		private final HttpServletRequest request;
 		HttpRequestAttributeDelegate(HttpServletRequest request) {
 			this.request = request;

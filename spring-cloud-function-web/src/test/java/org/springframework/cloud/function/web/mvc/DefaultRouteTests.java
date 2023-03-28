@@ -77,7 +77,7 @@ public class DefaultRouteTests {
 
 		@Bean
 		public Function<Flux<String>, Flux<String>> uppercase() {
-			return flux -> flux.map(value -> value.toUpperCase());
+			return flux -> flux.map(String::toUpperCase);
 		}
 
 	}

@@ -68,7 +68,7 @@ import org.springframework.util.StringUtils;
  */
 public final class FunctionTypeUtils {
 
-	private static  Log logger = LogFactory.getLog(FunctionTypeUtils.class);
+	private static final  Log logger = LogFactory.getLog(FunctionTypeUtils.class);
 
 	private FunctionTypeUtils() {
 
@@ -161,15 +161,15 @@ public final class FunctionTypeUtils {
 	public static Method discoverFunctionalMethod(Class<?> pojoFunctionClass) {
 		if (Supplier.class.isAssignableFrom(pojoFunctionClass)) {
 			return Stream.of(ReflectionUtils.getDeclaredMethods(pojoFunctionClass)).filter(m -> !m.isSynthetic()
-					&& m.getName().equals("get")).findFirst().get();
+					&& "get".equals(m.getName())).findFirst().get();
 		}
 		else if (Consumer.class.isAssignableFrom(pojoFunctionClass) || BiConsumer.class.isAssignableFrom(pojoFunctionClass)) {
 			return Stream.of(ReflectionUtils.getDeclaredMethods(pojoFunctionClass)).filter(m -> !m.isSynthetic()
-					&& m.getName().equals("accept")).findFirst().get();
+					&& "accept".equals(m.getName())).findFirst().get();
 		}
 		else if (Function.class.isAssignableFrom(pojoFunctionClass) || BiFunction.class.isAssignableFrom(pojoFunctionClass)) {
 			return Stream.of(ReflectionUtils.getDeclaredMethods(pojoFunctionClass)).filter(m -> !m.isSynthetic()
-					&& m.getName().equals("apply")).findFirst().get();
+					&& "apply".equals(m.getName())).findFirst().get();
 		}
 
 		List<Method> methods = new ArrayList<>();
@@ -250,18 +250,18 @@ public final class FunctionTypeUtils {
 	 */
 	public static Type discoverFunctionTypeFromFunctionMethod(Method functionMethod) {
 		Assert.isTrue(
-				functionMethod.getName().equals("apply") ||
-				functionMethod.getName().equals("accept") ||
-				functionMethod.getName().equals("get"),
+				"apply".equals(functionMethod.getName()) ||
+				"accept".equals(functionMethod.getName()) ||
+				"get".equals(functionMethod.getName()),
 				"Only Supplier, Function or Consumer supported at the moment. Was " + functionMethod.getDeclaringClass());
 
-		if (functionMethod.getName().equals("apply")) {
+		if ("apply".equals(functionMethod.getName())) {
 			return ResolvableType.forClassWithGenerics(Function.class,
 					ResolvableType.forMethodParameter(functionMethod, 0),
 					ResolvableType.forMethodReturnType(functionMethod)).getType();
 
 		}
-		else if (functionMethod.getName().equals("accept")) {
+		else if ("accept".equals(functionMethod.getName())) {
 			return ResolvableType.forClassWithGenerics(Consumer.class,
 					ResolvableType.forMethodParameter(functionMethod, 0)).getType();
 		}
