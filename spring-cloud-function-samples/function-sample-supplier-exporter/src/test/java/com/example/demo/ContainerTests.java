@@ -15,6 +15,7 @@
  */
 package com.example.demo;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import org.awaitility.Awaitility;
@@ -47,12 +48,9 @@ public class ContainerTests {
 			System.err.println(host + ":" + port);
 			DemoApplication.main(new String[] { "--AWS_LAMBDA_RUNTIME_API=" + host + ":" + port, "--_HANDLER=foobar",
 					"--logging.level.org.springframework=DEBUG" });
-			ResponseEntity<String> response = Awaitility.waitAtMost(30, TimeUnit.SECONDS).until(() -> {
-				ResponseEntity<String> result = new RestTemplate().postForEntity(
+			ResponseEntity<String> response = Awaitility.waitAtMost(30, TimeUnit.SECONDS).until(() -> new RestTemplate().postForEntity(
 						"http://" + host + ":" + port + "/2015-03-31/functions/foobar/invocations",
-						"{\"name\":\"foo\"}", String.class);
-				return result;
-			}, result -> result != null);
+						"{\"name\":\"foo\"}", String.class), Objects::nonNull);
 			assertThat(response.getBody()).contains("hi foo!");
 			assertThat(response.getHeaders()).containsKey("X-Amzn-Requestid");
 		}

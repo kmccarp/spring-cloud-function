@@ -61,7 +61,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  */
 public class ProxyMvc {
 
-	private static Log LOG = LogFactory.getLog(ProxyMvc.class);
+	private static final Log LOG = LogFactory.getLog(ProxyMvc.class);
 
 	static final String MVC_RESULT_ATTRIBUTE = ProxyMvc.class.getName().concat(".MVC_RESULT_ATTRIBUTE");
 
@@ -69,7 +69,7 @@ public class ProxyMvc {
 
 	private final ConfigurableWebApplicationContext applicationContext;
 
-	private ServletContext servletContext;
+	private final ServletContext servletContext;
 
 	public ConfigurableWebApplicationContext getApplicationContext() {
 		return this.applicationContext;
@@ -170,7 +170,7 @@ public class ProxyMvc {
 		ProxyFilterChain(DispatcherServlet servlet) {
 			List<Filter> filters = new ArrayList<>();
 			servlet.getServletContext().getFilterRegistrations().values().forEach(fr -> filters.add(((ProxyFilterRegistration) fr).getFilter()));
-			servlet.getWebApplicationContext().getBeansOfType(Filter.class).values().forEach(f -> filters.add(f));
+			servlet.getWebApplicationContext().getBeansOfType(Filter.class).values().forEach(filters::add);
 			Assert.notNull(filters, "filters cannot be null");
 			Assert.noNullElements(filters, "filters cannot contain null values");
 			this.filters = initFilterList(servlet, filters.toArray(new Filter[] {}));
@@ -320,7 +320,7 @@ public class ProxyMvc {
 
 		@Override
 		public Enumeration<String> getInitParameterNames() {
-			return Collections.enumeration(new ArrayList<String>());
+			return Collections.enumeration(new ArrayList<>());
 		}
 
 		@Override

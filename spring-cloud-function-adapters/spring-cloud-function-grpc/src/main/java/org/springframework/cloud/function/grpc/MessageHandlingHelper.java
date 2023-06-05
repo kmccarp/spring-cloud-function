@@ -54,7 +54,7 @@ import org.springframework.util.CollectionUtils;
  */
 public class MessageHandlingHelper<T extends GeneratedMessageV3> implements SmartLifecycle {
 
-	private Log logger = LogFactory.getLog(MessageHandlingHelper.class);
+	private final Log logger = LogFactory.getLog(MessageHandlingHelper.class);
 
 	private final List<GrpcMessageConverter<?>> grpcConverters;
 
@@ -111,7 +111,7 @@ public class MessageHandlingHelper<T extends GeneratedMessageV3> implements Smar
 		Flux.from(replyStream).doOnNext(replyMessage -> {
 			responseObserver.onNext(this.toGrpcMessage(replyMessage, (Class<T>) request.getClass()));
 		})
-		.doOnComplete(() -> responseObserver.onCompleted())
+		.doOnComplete(responseObserver::onCompleted)
 		.subscribe();
 	}
 

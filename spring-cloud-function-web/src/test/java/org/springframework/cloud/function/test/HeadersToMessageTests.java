@@ -56,11 +56,10 @@ public class HeadersToMessageTests {
 
 		@Override
 		public Message<String> apply(Message<String> request) {
-			Message<String> message = MessageBuilder
+			return MessageBuilder
 					.withPayload(request.getPayload().toUpperCase())
 					.setHeader("X-Content-Type", "application/xml")
 					.setHeader("foo", "bar").build();
-			return message;
 		}
 
 	}

@@ -49,7 +49,7 @@ import org.springframework.util.StringUtils;
  */
 public class WebProxyInvoker {
 
-	private static Log logger = LogFactory.getLog(WebProxyInvoker.class);
+	private static final Log logger = LogFactory.getLog(WebProxyInvoker.class);
 
 	private final ProxyMvc mvc;
 
@@ -124,7 +124,7 @@ public class WebProxyInvoker {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Response: " + responseString);
 			}
-			Map<String, Object> apiGatewayResponseStructure = new HashMap<String, Object>();
+			Map<String, Object> apiGatewayResponseStructure = new HashMap<>();
 			apiGatewayResponseStructure.put("isBase64Encoded", false);
 			apiGatewayResponseStructure.put("statusCode", HttpStatus.OK.value());
 			apiGatewayResponseStructure.put("body", responseString);

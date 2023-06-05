@@ -55,8 +55,6 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeLocator;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.util.ReflectionUtils.MethodCallback;
-import org.springframework.util.ReflectionUtils.MethodFilter;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
@@ -68,7 +66,7 @@ import org.springframework.util.StringUtils;
  */
 class FunctionArchiveDeployer extends JarLauncher {
 
-	private static Log logger = LogFactory.getLog(FunctionArchiveDeployer.class);
+	private static final Log logger = LogFactory.getLog(FunctionArchiveDeployer.class);
 
 	private final StandardEvaluationContext evalContext = new StandardEvaluationContext();
 
@@ -255,18 +253,12 @@ class FunctionArchiveDeployer extends JarLauncher {
 		AtomicReference<Type> typeRef = new AtomicReference<>();
 		Class<?> functionClass = Thread.currentThread().getContextClassLoader().loadClass(functionClassName);
 
-		ReflectionUtils.doWithMethods(functionClass, new MethodCallback() {
-			@Override
-			public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-				typeRef.set(FunctionTypeUtils.discoverFunctionTypeFromFunctionMethod(method));
-			}
-		}, new MethodFilter() {
-			@Override
-			public boolean matches(Method method) {
-				String name = method.getName();
-				return typeRef.get() == null && !method.isBridge()
-						&& ("apply".equals(name) || "accept".equals(name) || "get".equals(name));
-			}
+		ReflectionUtils.doWithMethods(functionClass, method -> {
+			typeRef.set(FunctionTypeUtils.discoverFunctionTypeFromFunctionMethod(method));
+		}, method -> {
+			String name = method.getName();
+			return typeRef.get() == null && !method.isBridge()
+			&& ("apply".equals(name) || "accept".equals(name) || "get".equals(name));
 		});
 
 		if (typeRef.get() != null) {
@@ -322,7 +314,7 @@ class FunctionArchiveDeployer extends JarLauncher {
 
 	@SuppressWarnings("unchecked")
 	private Map<String, Object> discoverBeanFunctions() {
-		Map<String, Object> allFunctions = new HashMap<String, Object>();
+		Map<String, Object> allFunctions = new HashMap<>();
 		if (evalContext.lookupVariable("context") != null) { // no start-class uber jars
 			Expression parsed = new SpelExpressionParser()
 					.parseExpression("#context.getBeansOfType(T(java.util.function.Function))");

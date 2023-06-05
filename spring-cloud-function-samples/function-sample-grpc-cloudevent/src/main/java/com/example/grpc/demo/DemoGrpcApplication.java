@@ -54,12 +54,10 @@ public class DemoGrpcApplication  {
 
 	@Bean
 	public Function<Message<String>, Message<String>> uppercase() {
-		return message -> {
-			return MessageBuilder.withPayload(message.getPayload().toUpperCase())
+		return message -> MessageBuilder.withPayload(message.getPayload().toUpperCase())
 					.copyHeaders(message.getHeaders())
 					.setHeader("uppercased", "true")
 					.build();
-		};
 	}
 }
 

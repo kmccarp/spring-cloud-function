@@ -122,12 +122,12 @@ final class FunctionRSocketUtils {
 		messageMap.put(PAYLOAD, message.getPayload());
 		Map<String, Object> headers = new HashMap<>();
 		for (String key : message.getHeaders().keySet()) {
-			if (key.equals("lookupDestination") ||
-					key.equals("reconciledLookupDestination") ||
+			if ("lookupDestination".equals(key) ||
+					"reconciledLookupDestination".equals(key) ||
 					key.equals(MessageHeaders.CONTENT_TYPE)) {
 				headers.put(key, message.getHeaders().get(key).toString());
 			}
-			else if (!key.equals("rsocketRequester")) {
+			else if (!"rsocketRequester".equals(key)) {
 				headers.put(key, message.getHeaders().get(key));
 			}
 		}

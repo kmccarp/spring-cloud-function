@@ -35,7 +35,7 @@ public class FunctionSampleSpringIntegrationApplication {
 
 	@Bean
 	public IntegrationFlow uppercaseFlow() {
-		return IntegrationFlows.from(MessageFunction.class, (gateway) -> gateway.beanName("uppercase"))
+		return IntegrationFlows.from(MessageFunction.class, gateway -> gateway.beanName("uppercase"))
 				.<String, String>transform(String::toUpperCase)
 				.logAndReply(LoggingHandler.Level.WARN);
 	}

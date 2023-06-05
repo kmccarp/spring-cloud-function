@@ -39,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class RequestResponseTests {
 
-	private ObjectMapper mapper = new ObjectMapper();
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	private ProxyMvc mvc;
 

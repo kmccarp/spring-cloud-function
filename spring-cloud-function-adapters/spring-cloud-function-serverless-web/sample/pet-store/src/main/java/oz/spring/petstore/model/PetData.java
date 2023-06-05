@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PetData {
-    private static List<String> breeds = new ArrayList<>();
+	private static final List<String> breeds = new ArrayList<>();
     static {
         breeds.add("Afghan Hound");
         breeds.add("Beagle");
@@ -31,7 +31,7 @@ public class PetData {
         breeds.add("Norwegian Elkhound");
     }
 
-    private static List<String> names = new ArrayList<>();
+	private static final List<String> names = new ArrayList<>();
     static {
         names.add("Bailey");
         names.add("Bella");

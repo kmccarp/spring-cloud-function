@@ -40,11 +40,11 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 public class HttpSupplier implements Supplier<Flux<?>> {
 
-	private static Log logger = LogFactory.getLog(HttpSupplier.class);
+	private static final Log logger = LogFactory.getLog(HttpSupplier.class);
 
-	private WebClient client;
+	private final WebClient client;
 
-	private ExporterProperties props;
+	private final ExporterProperties props;
 
 	/**
 	 * @param client the WebClient to use. The baseUrl should be set.

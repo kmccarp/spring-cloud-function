@@ -46,12 +46,12 @@ public class FunctionLookupHelper {
 
 	<P> Function<P, ?> lookupFunction(String functionDefinition) {
 		Supplier<Function<P, ?>> memoizedFunction = lazyLookup(Function.class, functionDefinition);
-		return (p) -> memoizedFunction.get().apply(p);
+		return p -> memoizedFunction.get().apply(p);
 	}
 
 	<P> Consumer<P> lookupConsumer(String consumerDefinition) {
 		Supplier<Consumer<P>> memoizedConsumer = lazyLookup(Consumer.class, consumerDefinition);
-		return (p) -> memoizedConsumer.get().accept(p);
+		return p -> memoizedConsumer.get().accept(p);
 	}
 
 	private <T> Supplier<T> lazyLookup(Class<?> functionType, String functionDefinition) {

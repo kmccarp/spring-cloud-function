@@ -30,7 +30,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -85,13 +84,13 @@ public class PetStoreSpringAppConfig {
 					chain.doFilter(request, response);
 				}
 			}, SecurityContextHolderFilter.class)
-			.authorizeHttpRequests((requests) -> requests
+			.authorizeHttpRequests(requests -> requests
 				.requestMatchers("/", "/pets", "/pets/").hasAnyAuthority("USER")
 				.requestMatchers("/foo").hasAnyAuthority("FOO")
 				.anyRequest().authenticated()
 			)
 			.exceptionHandling().accessDeniedHandler(accessDeniedHandler()).and()
-			.logout((logout) -> logout.permitAll());
+			.logout(LogoutConfigurer::permitAll);
 
 		return http.build();
 	}
@@ -99,12 +98,8 @@ public class PetStoreSpringAppConfig {
 	@Bean
 	public AccessDeniedHandler accessDeniedHandler() {
 
-		return new AccessDeniedHandler() {
-			@Override
-			public void handle(HttpServletRequest request, HttpServletResponse response,
-					AccessDeniedException accessDeniedException) throws IOException, ServletException {
-				response.sendError(403, "Can't touch this");
-			}
+		return (request, response, accessDeniedException) -> {
+			response.sendError(403, "Can't touch this");
 		};
 	}
 

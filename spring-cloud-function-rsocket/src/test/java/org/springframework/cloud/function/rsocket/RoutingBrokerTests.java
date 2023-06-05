@@ -138,7 +138,7 @@ public class RoutingBrokerTests {
 	public static class SampleFunctionConfiguration {
 		@Bean
 		public Function<String, String> uppercase() {
-			return v -> v.toUpperCase();
+			return String::toUpperCase;
 		}
 	}
 }

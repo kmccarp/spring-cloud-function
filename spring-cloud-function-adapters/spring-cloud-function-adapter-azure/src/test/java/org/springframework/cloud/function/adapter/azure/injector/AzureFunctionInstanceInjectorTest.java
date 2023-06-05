@@ -78,7 +78,7 @@ public class AzureFunctionInstanceInjectorTest {
 
 		MyAzureTestFunction functionInstance = injector.getInstance(MyAzureTestFunction.class);
 
-		HttpFunctionInvokerTests.HttpRequestMessageStub<Optional<String>> request = new HttpFunctionInvokerTests.HttpRequestMessageStub<Optional<String>>();
+		HttpFunctionInvokerTests.HttpRequestMessageStub<Optional<String>> request = new HttpFunctionInvokerTests.HttpRequestMessageStub<>();
 
 		request.setBody(Optional.of("test"));
 
@@ -103,12 +103,7 @@ public class AzureFunctionInstanceInjectorTest {
 				}
 			}
 			else {
-				functionInstanceInjector = new FunctionInstanceInjector() {
-					@Override
-					public <T> T getInstance(Class<T> functionClass) throws Exception {
-						return functionClass.getDeclaredConstructor().newInstance();
-					}
-				};
+				functionInstanceInjector = functionClass -> functionClass.getDeclaredConstructor().newInstance();
 			}
 		}
 		finally {

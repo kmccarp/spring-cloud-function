@@ -68,7 +68,7 @@ public class PetsController {
 
 	@RequestMapping(path = "/pets/{petId}", method = RequestMethod.GET)
 	public Pet listPets(@PathVariable String petId) {
-		if (petId.equals("2")) {
+		if ("2".equals(petId)) {
 			throw new DogNotFoundException();
 		}
 		Pet newPet = new Pet();

@@ -23,7 +23,7 @@ public class FunctionConfiguration implements ApplicationContextInitializer<Gene
 	}
 
 	public Function<String, String> uppercase() {
-		return value -> value.toUpperCase();
+		return String::toUpperCase;
 	}
 
 	public Function<String, String> reverse() {
@@ -45,7 +45,7 @@ public class FunctionConfiguration implements ApplicationContextInitializer<Gene
 	public void initialize(GenericApplicationContext applicationContext) {
 		System.out.println("==> Initializing");
 		applicationContext.registerBean(MessageRoutingCallback.class,
-				() -> new RoutingCallback());
+		RoutingCallback::new);
 		applicationContext.registerBean("uppercase", FunctionRegistration.class,
                 () -> new FunctionRegistration<>(uppercase()).type(
 					FunctionTypeUtils.functionType(String.class, String.class)));

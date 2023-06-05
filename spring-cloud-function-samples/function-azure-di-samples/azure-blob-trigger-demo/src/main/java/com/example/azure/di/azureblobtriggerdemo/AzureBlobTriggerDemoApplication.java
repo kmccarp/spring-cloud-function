@@ -31,6 +31,6 @@ public class AzureBlobTriggerDemoApplication {
 
 	@Bean
 	public Function<String, String> uppercase() {
-		return payload -> payload.toUpperCase();
+		return String::toUpperCase;
 	}
 }

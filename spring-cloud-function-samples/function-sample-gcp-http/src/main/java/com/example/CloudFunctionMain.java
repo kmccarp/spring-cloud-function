@@ -31,6 +31,6 @@ public class CloudFunctionMain {
 
 	@Bean
 	public Function<String, String> function() {
-		return value -> value.toUpperCase();
+		return String::toUpperCase;
 	}
 }

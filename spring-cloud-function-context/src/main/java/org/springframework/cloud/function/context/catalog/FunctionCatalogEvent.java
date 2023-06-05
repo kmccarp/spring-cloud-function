@@ -25,6 +25,8 @@ import org.springframework.context.ApplicationEvent;
 @SuppressWarnings("serial")
 public class FunctionCatalogEvent extends ApplicationEvent {
 
+	private static final long serialVersionUID = 1;
+
 	public FunctionCatalogEvent(Object source) {
 		super(source);
 	}

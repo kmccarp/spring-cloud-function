@@ -32,8 +32,8 @@ public class ScannedFunction
 
 	@Override
 	public Map<String, String> apply(Map<String, String> m) {
-		return m.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(),
-				e -> e.getValue().toString().toUpperCase()));
+		return m.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
+				e -> e.getValue().toUpperCase()));
 	}
 
 }

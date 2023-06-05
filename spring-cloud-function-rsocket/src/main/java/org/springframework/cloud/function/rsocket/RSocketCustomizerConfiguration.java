@@ -35,17 +35,14 @@ public class RSocketCustomizerConfiguration {
 
 	@Bean
 	RSocketStrategiesCustomizer rSocketStrategiesCustomizer(JsonMapper jsonMapper) {
-		return new RSocketStrategiesCustomizer() {
-			@Override
-			public void customize(Builder strategies) {
-				strategies
-				.encoders(encoders -> {
-					encoders.add(0, new MessageAwareJsonEncoder(jsonMapper, true));
-				})
-				.decoders(decoders -> {
-					decoders.add(0, new MessageAwareJsonDecoder(jsonMapper));
-				});
-			}
+		return strategies -> {
+			strategies
+			.encoders(encoders -> {
+				encoders.add(0, new MessageAwareJsonEncoder(jsonMapper, true));
+			})
+			.decoders(decoders -> {
+				decoders.add(0, new MessageAwareJsonDecoder(jsonMapper));
+			});
 		};
 	}
 }

@@ -20,7 +20,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,8 +67,7 @@ abstract class DeployerContextUtils {
 		Class<?>[] params = getParamTypes(factory, definition);
 		Method method = ReflectionUtils.findMethod(factory, methodName,
 				params);
-		Type type = method.getGenericReturnType();
-		return type;
+		return method.getGenericReturnType();
 	}
 
 	private static Class<?>[] getParamTypes(Class<?> factory,
@@ -93,19 +91,14 @@ abstract class DeployerContextUtils {
 	private static Method[] getCandidateMethods(final Class<?> factoryClass,
 			final RootBeanDefinition mbd) {
 		if (System.getSecurityManager() != null) {
-			return AccessController.doPrivileged(new PrivilegedAction<Method[]>() {
-				@Override
-				public Method[] run() {
-					return (mbd.isNonPublicAccessAllowed()
-							? ReflectionUtils.getAllDeclaredMethods(factoryClass)
-							: factoryClass.getMethods());
-				}
-			});
+			return AccessController.doPrivileged(() -> mbd.isNonPublicAccessAllowed()
+			? ReflectionUtils.getAllDeclaredMethods(factoryClass)
+			: factoryClass.getMethods());
 		}
 		else {
-			return (mbd.isNonPublicAccessAllowed()
+			return mbd.isNonPublicAccessAllowed()
 					? ReflectionUtils.getAllDeclaredMethods(factoryClass)
-					: factoryClass.getMethods());
+					: factoryClass.getMethods();
 		}
 	}
 

@@ -183,17 +183,17 @@ class CustomFunctionInvokerTests {
 
 		@Bean
 		public Function<String, String> imperativeUppercase() {
-			return (s) -> s.toUpperCase();
+			return String::toUpperCase;
 		}
 
 		@Bean
 		public Function<Mono<String>, Mono<String>> reactiveMonoUppercase() {
-			return (m) -> m.map(String::toUpperCase);
+			return m -> m.map(String::toUpperCase);
 		}
 
 		@Bean
 		public Function<Flux<String>, Flux<String>> reactiveFluxUppercase() {
-			return (f) -> f.map(String::toUpperCase);
+			return f -> f.map(String::toUpperCase);
 		}
 
 	}
