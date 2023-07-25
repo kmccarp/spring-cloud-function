@@ -20,6 +20,8 @@ package org.springframework.cloud.function.web.flux;
 import reactor.core.publisher.Mono;
 
 import org.springframework.beans.factory.InitializingBean;
+
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -93,7 +95,7 @@ public class FunctionHandlerMapping extends RequestMappingHandlerMapping
 			request.getAttributes().put(WebRequestConstants.HANDLER, function);
 		}
 		Object actual = function;
-		return handler.filter(method -> actual != null);
+		return handler.filter(Objects::nonNull);
 	}
 
 	@Override

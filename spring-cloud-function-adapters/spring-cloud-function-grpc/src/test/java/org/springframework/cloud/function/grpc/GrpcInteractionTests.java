@@ -323,7 +323,7 @@ public class GrpcInteractionTests {
 
 		@Bean
 		public Function<String, String> uppercase() {
-			return v -> v.toUpperCase();
+			return String::toUpperCase;
 		}
 
 		@Bean
@@ -343,7 +343,7 @@ public class GrpcInteractionTests {
 
 		@Bean
 		public Function<Flux<String>, Flux<String>> uppercaseReactive() {
-			return flux -> flux.map(v -> v.toUpperCase());
+			return flux -> flux.map(String::toUpperCase);
 		}
 
 		@Bean

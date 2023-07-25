@@ -52,7 +52,7 @@ public class AWSCustomRuntime  {
 
 	@Bean("2018-06-01/runtime/invocation/consume/response")
 	Consumer<Message<String>> consume() {
-		return v -> outputQueue.offer(v);
+		return outputQueue::offer;
 	}
 
 	@SuppressWarnings("unchecked")

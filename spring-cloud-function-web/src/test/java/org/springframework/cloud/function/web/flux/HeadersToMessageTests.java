@@ -81,23 +81,17 @@ public class HeadersToMessageTests {
 
 		@Bean({ "string" })
 		public Function<Message<String>, Message<String>> functiono() {
-			return request -> {
-				Message<String> message = MessageBuilder.withPayload(request.getPayload())
+			return request -> MessageBuilder.withPayload(request.getPayload())
 						.setHeader("X-Content-Type", "application/xml")
 						.setHeader("foo", "bar").build();
-				return message;
-			};
 		}
 
 		@Bean({ "employee" })
 		public Function<Message<Employee>, Message<Employee>> function1() {
-			return request -> {
-				Message<Employee> message = MessageBuilder
+			return request -> MessageBuilder
 						.withPayload(request.getPayload())
 						.setHeader("X-Content-Type", "application/xml")
 						.setHeader("foo", "bar").build();
-				return message;
-			};
 		}
 
 	}

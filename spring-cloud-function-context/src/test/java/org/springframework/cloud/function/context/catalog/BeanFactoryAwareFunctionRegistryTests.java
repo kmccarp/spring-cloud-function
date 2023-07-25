@@ -97,8 +97,7 @@ public class BeanFactoryAwareFunctionRegistryTests {
 		this.context = new SpringApplicationBuilder(configClass)
 				.run("--logging.level.org.springframework.cloud.function=DEBUG",
 						"--spring.main.lazy-initialization=true");
-		FunctionCatalog catalog = context.getBean(FunctionCatalog.class);
-		return catalog;
+		return context.getBean(FunctionCatalog.class);
 	}
 
 	@BeforeEach
@@ -109,7 +108,7 @@ public class BeanFactoryAwareFunctionRegistryTests {
 	@Test
 	public void testFunctionEligibilityFiltering() {
 		System.setProperty("spring.cloud.function.ineligible-definitions", "asJsonNode");
-		Collection<FunctionInvocationWrapper> registeredFunction = new ArrayList<FunctionInvocationWrapper>();
+		Collection<FunctionInvocationWrapper> registeredFunction = new ArrayList<>();
 		FunctionCatalog catalog = this.configureCatalog(JsonNodeConfiguration.class);
 		for (String beanName : context.getBeanDefinitionNames()) {
 			try {
@@ -812,12 +811,12 @@ public class BeanFactoryAwareFunctionRegistryTests {
 
 		@Bean
 		public Function<String, String> uppercase() {
-			return v -> v.toUpperCase();
+			return String::toUpperCase;
 		}
 
 		@Bean
 		public Function<Message<String>, String> echo() {
-			return v -> v.getPayload();
+			return org.springframework.messaging.Message::getPayload;
 		}
 
 		@Bean
@@ -836,16 +835,12 @@ public class BeanFactoryAwareFunctionRegistryTests {
 	public static class JsonNodeConfiguration {
 		@Bean
 		public Function<Message<JsonNode>, String> messageAsJsonNode() {
-			return v -> {
-				return v.getPayload().toString();
-			};
+			return v -> v.getPayload().toString();
 		}
 
 		@Bean
 		public Function<JsonNode, String> asJsonNode() {
-			return v -> {
-				return v.toString();
-			};
+			return JsonNode::toString;
 		}
 	}
 
@@ -863,7 +858,7 @@ public class BeanFactoryAwareFunctionRegistryTests {
 	public static class ReactiveFunctionImpl implements ReactiveFunction<String, Integer> {
 		@Override
 		public Flux<Integer> apply(Flux<String> inFlux) {
-			return inFlux.map(v -> Integer.parseInt(v));
+			return inFlux.map(Integer::parseInt);
 		}
 	}
 
@@ -877,11 +872,8 @@ public class BeanFactoryAwareFunctionRegistryTests {
 
 		@Bean
 		public Function<String, List<Message<String>>> parseToListOfMessages() {
-			return v -> {
-				List<Message<String>> list = Arrays.asList(v.split(",")).stream()
+			return v -> Arrays.asList(v.split(",")).stream()
 						.map(value -> MessageBuilder.withPayload(value).build()).collect(Collectors.toList());
-				return list;
-			};
 		}
 	}
 
@@ -985,8 +977,7 @@ public class BeanFactoryAwareFunctionRegistryTests {
 					Message<?> message, Class<?> targetClass, @Nullable Object conversionHint) {
 				Tuple2<String, String> payload = (Tuple2<String, String>) message.getPayload();
 
-				String convertedPayload = payload.getT1() + "," + payload.getT2();
-				return convertedPayload;
+				return payload.getT1() + "," + payload.getT2();
 			}
 
 			@Override
@@ -1044,7 +1035,7 @@ public class BeanFactoryAwareFunctionRegistryTests {
 
 		@Bean
 		public Function<String, String> uppercase() {
-			return x -> x.toUpperCase();
+			return String::toUpperCase;
 		}
 	}
 
@@ -1061,9 +1052,7 @@ public class BeanFactoryAwareFunctionRegistryTests {
 
 		@Bean
 		public Function<Person, Person> uppercasePerson() {
-			return person -> {
-				return new Person(person.getName().toUpperCase(), person.getId());
-			};
+			return person -> new Person(person.getName().toUpperCase(), person.getId());
 		}
 
 		@Bean
@@ -1073,31 +1062,23 @@ public class BeanFactoryAwareFunctionRegistryTests {
 
 		@Bean
 		public BiFunction<String, Map, String> biFuncUpperCase() {
-			return (p, h) -> {
-				return p.toUpperCase();
-			};
+			return (p, h) -> p.toUpperCase();
 		}
 
 		@Bean
 		public Function<Map<String, Object>, Person> maptopojo() {
-			return map -> {
-				Person person = (Person) map.get("person");
-				return person;
-			};
+			return map -> (Person) map.get("person");
 		}
 
 		@Bean
 		public Function<String, String> uppercase() {
-			return v -> v.toUpperCase();
+			return String::toUpperCase;
 		}
 
 		@Bean
 		public Function<Message<String>, Message<String>> uppercaseMessage() {
-			return message -> {
-				Message<String> result = MessageBuilder.fromMessage(message)
+			return message -> MessageBuilder.fromMessage(message)
 					.removeHeader("foo").setHeader("bar", "bar").build();
-				return result;
-			};
 		}
 
 		@Bean
@@ -1110,7 +1091,7 @@ public class BeanFactoryAwareFunctionRegistryTests {
 
 		@Bean
 		public Function<Flux<String>, Flux<String>> uppercaseFlux() {
-			return flux -> flux.map(v -> v.toUpperCase());
+			return flux -> flux.map(String::toUpperCase);
 		}
 
 		@Bean
@@ -1135,9 +1116,7 @@ public class BeanFactoryAwareFunctionRegistryTests {
 
 		@Bean
 		public Function<Flux<String>, Flux<String>> reverseFlux() {
-			return flux -> flux.map(value -> {
-				return new StringBuilder(value).reverse().toString();
-			});
+			return flux -> flux.map(value -> new StringBuilder(value).reverse().toString());
 		}
 
 
@@ -1165,8 +1144,8 @@ public class BeanFactoryAwareFunctionRegistryTests {
 		public Function<Flux<Person>, Tuple3<Flux<Person>, Flux<String>, Flux<Integer>>> multiOutputAsTuple() {
 			return flux -> {
 				Flux<Person> pubSubFlux = flux.publish().autoConnect(3);
-				Flux<String> nameFlux = pubSubFlux.map(person -> person.getName());
-				Flux<Integer> idFlux = pubSubFlux.map(person -> person.getId());
+				Flux<String> nameFlux = pubSubFlux.map(org.springframework.cloud.function.context.catalog.BeanFactoryAwareFunctionRegistryTests.Person::getName);
+				Flux<Integer> idFlux = pubSubFlux.map(org.springframework.cloud.function.context.catalog.BeanFactoryAwareFunctionRegistryTests.Person::getId);
 				return Tuples.of(pubSubFlux, nameFlux, idFlux);
 			};
 		}
@@ -1235,7 +1214,7 @@ public class BeanFactoryAwareFunctionRegistryTests {
 		@Bean
 		// Perhaps it should not be allowed. Recommend Function<Flux, Mono<Void>>
 		public Consumer<Flux<Person>> reactivePojoConsumer() {
-			return flux -> flux.subscribe(v -> consumerInputRef.set(v));
+			return flux -> flux.subscribe(consumerInputRef::set);
 		}
 	}
 

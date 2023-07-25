@@ -43,7 +43,7 @@ public class PrimitiveTypesFromStringMessageConverter extends AbstractMessageCon
 
 	@Override
 	protected boolean supports(Class<?> clazz) {
-		return (Integer.class == clazz || Long.class == clazz);
+		return Integer.class == clazz || Long.class == clazz;
 	}
 
 	@Override

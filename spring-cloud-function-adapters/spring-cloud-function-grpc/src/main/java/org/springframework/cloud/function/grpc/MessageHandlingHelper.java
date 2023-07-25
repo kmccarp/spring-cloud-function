@@ -54,7 +54,7 @@ import org.springframework.util.CollectionUtils;
  */
 public class MessageHandlingHelper<T extends GeneratedMessageV3> implements SmartLifecycle {
 
-	private Log logger = LogFactory.getLog(MessageHandlingHelper.class);
+    private final Log logger = LogFactory.getLog(MessageHandlingHelper.class);
 
 	private final List<GrpcMessageConverter<?>> grpcConverters;
 
@@ -111,7 +111,7 @@ public class MessageHandlingHelper<T extends GeneratedMessageV3> implements Smar
 		Flux.from(replyStream).doOnNext(replyMessage -> {
 			responseObserver.onNext(this.toGrpcMessage(replyMessage, (Class<T>) request.getClass()));
 		})
-		.doOnComplete(() -> responseObserver.onCompleted())
+		.doOnComplete(responseObserver::onCompleted)
 		.subscribe();
 	}
 
@@ -154,7 +154,7 @@ public class MessageHandlingHelper<T extends GeneratedMessageV3> implements Smar
 				resultRef.offer(replyMessage);
 			});
 
-			return new StreamObserver<T>() {
+			return new StreamObserver<>() {
 				@Override
 				public void onNext(T inputMessage) {
 					if (logger.isDebugEnabled()) {
@@ -245,7 +245,7 @@ public class MessageHandlingHelper<T extends GeneratedMessageV3> implements Smar
 			responseObserver.onNext(outputMessage);
 		});
 
-		return new StreamObserver<T>() {
+		return new StreamObserver<>() {
 			@Override
 			public void onNext(T inputMessage) {
 				if (logger.isDebugEnabled()) {
@@ -275,7 +275,7 @@ public class MessageHandlingHelper<T extends GeneratedMessageV3> implements Smar
 	private StreamObserver<T> biStreamImperative(StreamObserver<T> responseObserver,
 			ServerCallStreamObserver<T> serverCallStreamObserver,
 			AtomicBoolean wasReady) {
-		return new StreamObserver<T>() {
+		return new StreamObserver<>() {
 
 			@SuppressWarnings("unchecked")
 			@Override

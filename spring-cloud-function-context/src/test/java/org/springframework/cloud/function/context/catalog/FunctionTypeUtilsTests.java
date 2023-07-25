@@ -202,7 +202,7 @@ public class FunctionTypeUtilsTests<T> {
 
 		@Override
 		public Flux<Integer> apply(Flux<String> inFlux) {
-			return inFlux.map(v -> Integer.parseInt(v));
+			return inFlux.map(Integer::parseInt);
 		}
 	}
 }

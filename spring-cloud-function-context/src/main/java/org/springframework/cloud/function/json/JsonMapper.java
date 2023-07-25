@@ -34,7 +34,7 @@ import org.springframework.cloud.function.context.catalog.FunctionTypeUtils;
  */
 public abstract class JsonMapper {
 
-	private static Log logger = LogFactory.getLog(JsonMapper.class);
+    private static final Log logger = LogFactory.getLog(JsonMapper.class);
 
 	@SuppressWarnings("unchecked")
 	public <T> T fromJson(Object json, Type type) {

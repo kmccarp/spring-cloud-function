@@ -49,7 +49,7 @@ public class MessageRoutingCallbackRSocketTests {
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
 							"--spring.cloud.function.expected-content-type=text/plain",
-							"--spring.rsocket.server.port=0");
+							"--spring.rsocket.server.port=0")
 		) {
 			RSocketRequester.Builder rsocketRequesterBuilder =
 				applicationContext.getBean(RSocketRequester.Builder.class);
@@ -117,7 +117,7 @@ public class MessageRoutingCallbackRSocketTests {
 
 		@Bean
 		public Function<String, String> uppercase() {
-			return v -> v.toUpperCase();
+			return String::toUpperCase;
 		}
 
 		@Bean
@@ -127,7 +127,7 @@ public class MessageRoutingCallbackRSocketTests {
 
 		@Bean
 		public Function<Flux<String>, Flux<String>> uppercaseReactive() {
-			return flux -> flux.map(v -> v.toUpperCase());
+			return flux -> flux.map(String::toUpperCase);
 		}
 
 		@Bean

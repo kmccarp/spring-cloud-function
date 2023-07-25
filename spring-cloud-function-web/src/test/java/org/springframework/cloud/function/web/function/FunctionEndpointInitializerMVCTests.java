@@ -66,12 +66,12 @@ public class FunctionEndpointInitializerMVCTests {
 
 		@Bean
 		public Function<String, String> uppercase() {
-			return s -> s.toUpperCase();
+			return String::toUpperCase;
 		}
 
 		@Bean
 		public Function<String, String> lowercase() {
-			return s -> s.toLowerCase();
+			return String::toLowerCase;
 		}
 
 		@Bean

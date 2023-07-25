@@ -107,7 +107,7 @@ class RSocketListenerFunction implements Function<Object, Publisher<?>> {
 			dataFlux = dataFlux.transform((Function) this.targetFunction);
 		}
 		else {
-			dataFlux = dataFlux.flatMap((data) -> {
+			dataFlux = dataFlux.flatMap(data -> {
 				Map<String, ?> messageMap = FunctionRSocketUtils.sanitizeMessageToMap((Message<?>) data);
 				Message sanitizedMessage = MessageBuilder.withPayload(messageMap.remove(FunctionRSocketUtils.PAYLOAD))
 						.copyHeaders((Map<String, ?>) messageMap.get(FunctionRSocketUtils.HEADERS))
@@ -117,7 +117,7 @@ class RSocketListenerFunction implements Function<Object, Publisher<?>> {
 				Publisher resultPublisher = result instanceof Publisher<?>
 					? (Publisher<?>) result
 					: Mono.just(result);
-				return Flux.from(resultPublisher).map(v -> extractPayloadIfNecessary(v));
+				return Flux.from(resultPublisher).map(this::extractPayloadIfNecessary);
 			});
 		}
 		return dataFlux;

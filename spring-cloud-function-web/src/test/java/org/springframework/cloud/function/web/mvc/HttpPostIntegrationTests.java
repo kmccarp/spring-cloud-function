@@ -407,7 +407,7 @@ public class HttpPostIntegrationTests {
 
 		@Bean
 		public Consumer<Flux<String>> updates() {
-			return flux -> flux.subscribe(value -> this.list.add(value));
+			return flux -> flux.subscribe(this.list::add);
 		}
 
 		@Bean
@@ -417,9 +417,7 @@ public class HttpPostIntegrationTests {
 
 		@Bean
 		public Consumer<String> bareUpdates() {
-			return value -> {
-				this.list.add(value);
-			};
+			return this.list::add;
 		}
 
 		@Bean("not/a")

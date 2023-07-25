@@ -58,8 +58,7 @@ public class BeanFactoryAwareFunctionRegistryMultiInOutTests {
 	private FunctionCatalog configureCatalog() {
 		ApplicationContext context = new SpringApplicationBuilder(SampleFunctionConfiguration.class)
 				.run("--logging.level.org.springframework.cloud.function=DEBUG");
-		FunctionCatalog catalog = context.getBean(FunctionCatalog.class);
-		return catalog;
+		return context.getBean(FunctionCatalog.class);
 	}
 
 	/*
@@ -74,9 +73,9 @@ public class BeanFactoryAwareFunctionRegistryMultiInOutTests {
 		Flux<Integer> intStream = Flux.just(1, 2, 3);
 
 		List<String> result = multiInputFunction.apply(Tuples.of(stringStream, intStream)).collectList().block();
-		assertThat(result.get(0).equals("one-1"));
-		assertThat(result.get(1).equals("one-2"));
-		assertThat(result.get(2).equals("one-3"));
+		assertThat("one-1".equals(result.get(0)));
+		assertThat("one-2".equals(result.get(1)));
+		assertThat("one-3".equals(result.get(2)));
 	}
 
 	@Test
@@ -127,9 +126,9 @@ public class BeanFactoryAwareFunctionRegistryMultiInOutTests {
 		Flux<String> intStream = Flux.just("1", "2", "2");
 
 		List<String> result = multiInputFunction.apply(Tuples.of(stringStream, intStream)).collectList().block();
-		assertThat(result.get(0).equals("11-1"));
-		assertThat(result.get(1).equals("22-2"));
-		assertThat(result.get(2).equals("33-3"));
+		assertThat("11-1".equals(result.get(0)));
+		assertThat("22-2".equals(result.get(1)));
+		assertThat("33-3".equals(result.get(2)));
 	}
 
 	/*
@@ -303,7 +302,7 @@ public class BeanFactoryAwareFunctionRegistryMultiInOutTests {
 
 		@Bean
 		public Function<String, String> uppercase() {
-			return v -> v.toUpperCase();
+			return String::toUpperCase;
 		}
 
 		// ============= MULTI-INPUT and MULTI-OUTPUT functions ============
@@ -330,8 +329,8 @@ public class BeanFactoryAwareFunctionRegistryMultiInOutTests {
 		public Function<Flux<Person>, Tuple3<Flux<Person>, Flux<String>, Flux<Integer>>> multiOutputAsTuplePojoIn() {
 			return flux -> {
 				Flux<Person> pubSubFlux = flux.publish().autoConnect(3);
-				Flux<String> nameFlux = pubSubFlux.map(person -> person.getName());
-				Flux<Integer> idFlux = pubSubFlux.map(person -> person.getId());
+				Flux<String> nameFlux = pubSubFlux.map(org.springframework.cloud.function.context.catalog.BeanFactoryAwareFunctionRegistryMultiInOutTests.Person::getName);
+				Flux<Integer> idFlux = pubSubFlux.map(org.springframework.cloud.function.context.catalog.BeanFactoryAwareFunctionRegistryMultiInOutTests.Person::getId);
 				return Tuples.of(pubSubFlux, nameFlux, idFlux);
 			};
 		}
@@ -339,9 +338,9 @@ public class BeanFactoryAwareFunctionRegistryMultiInOutTests {
 		@Bean
 		public Function<Flux<Message<Person>>, Tuple3<Flux<Person>, Flux<String>, Flux<Integer>>> multiOutputAsTupleMessageIn() {
 			return flux -> {
-				Flux<Person> pubSubFlux = flux.map(message -> message.getPayload()).publish().autoConnect(3);
-				Flux<String> nameFlux = pubSubFlux.map(person -> person.getName());
-				Flux<Integer> idFlux = pubSubFlux.map(person -> person.getId());
+				Flux<Person> pubSubFlux = flux.map(org.springframework.messaging.Message::getPayload).publish().autoConnect(3);
+				Flux<String> nameFlux = pubSubFlux.map(org.springframework.cloud.function.context.catalog.BeanFactoryAwareFunctionRegistryMultiInOutTests.Person::getName);
+				Flux<Integer> idFlux = pubSubFlux.map(org.springframework.cloud.function.context.catalog.BeanFactoryAwareFunctionRegistryMultiInOutTests.Person::getId);
 				return Tuples.of(pubSubFlux, nameFlux, idFlux);
 			};
 		}

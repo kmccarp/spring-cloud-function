@@ -49,7 +49,7 @@ import org.springframework.messaging.support.MessageBuilder;
  */
 public final class GrpcUtils {
 
-	private static Log logger = LogFactory.getLog(GrpcUtils.class);
+    private static final Log logger = LogFactory.getLog(GrpcUtils.class);
 
 	private GrpcUtils() {
 
@@ -201,7 +201,7 @@ public final class GrpcUtils {
 				.usePlaintext().build();
 
 		LinkedBlockingQueue<Message<byte[]>> resultRef = new LinkedBlockingQueue<>(1);
-		StreamObserver<GrpcSpringMessage> responseObserver = new StreamObserver<GrpcSpringMessage>() {
+		StreamObserver<GrpcSpringMessage> responseObserver = new StreamObserver<>() {
 			@Override
 			public void onNext(GrpcSpringMessage result) {
 				if (logger.isDebugEnabled()) {
@@ -237,9 +237,7 @@ public final class GrpcUtils {
 			catch (Exception e) {
 				requestObserver.onError(e);
 			}
-		}).doOnComplete(() -> {
-			requestObserver.onCompleted();
-		}).doOnError(e -> {
+		}).doOnComplete(requestObserver::onCompleted).doOnError(e -> {
 			e.printStackTrace();
 			responseObserver.onError(Status.UNKNOWN.withDescription("Error handling request")
 					.withCause(e).asRuntimeException());
@@ -256,7 +254,7 @@ public final class GrpcUtils {
 	}
 
 	private static ClientResponseObserver<GrpcSpringMessage, GrpcSpringMessage> clientResponseObserver(Flux<Message<byte[]>> inputStream, Many<Message<byte[]>> sink) {
-		return new ClientResponseObserver<GrpcSpringMessage, GrpcSpringMessage>() {
+		return new ClientResponseObserver<>() {
 
 			ClientCallStreamObserver<GrpcSpringMessage> requestStreamObserver;
 
@@ -275,9 +273,7 @@ public final class GrpcUtils {
 							}
 							requestStreamObserver.onNext(GrpcUtils.toGrpcSpringMessage(request));
 						})
-						.doOnComplete(() -> {
-							requestStreamObserver.onCompleted();
-						})
+						.doOnComplete(requestStreamObserver::onCompleted)
 						.subscribe();
 					}
 				});
