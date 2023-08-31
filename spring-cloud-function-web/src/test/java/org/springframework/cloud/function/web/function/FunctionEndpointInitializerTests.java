@@ -162,7 +162,7 @@ public class FunctionEndpointInitializerTests {
 			implements ApplicationContextInitializer<GenericApplicationContext> {
 
 		public Consumer<String> consume() {
-			return v -> System.out.println(v);
+			return System.out::println;
 		}
 
 		@Override
@@ -180,9 +180,7 @@ public class FunctionEndpointInitializerTests {
 	protected static class BeansConfiguration {
 		@Bean
 		public BiFunction<String, Map<String, Object>, Map<String, Object>> nullPayload() {
-			return (p, h) -> {
-				return h;
-			};
+			return (p, h) -> h;
 		}
 	}
 
@@ -204,9 +202,7 @@ public class FunctionEndpointInitializerTests {
 		}
 
 		public Function<String, String> reverse() {
-			return s -> {
-				return new StringBuilder(s).reverse().toString();
-			};
+			return s -> new StringBuilder(s).reverse().toString();
 		}
 
 		@Override

@@ -51,7 +51,7 @@ public class MessagingTests {
 				new SpringApplicationBuilder(MessagingConfiguration.class)
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
-						"--spring.rsocket.server.port=0");
+						"--spring.rsocket.server.port=0")
 		) {
 			int port = getLocalRsocketPort(applicationContext);
 
@@ -81,7 +81,7 @@ public class MessagingTests {
 				new SpringApplicationBuilder(MessagingConfiguration.class)
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
-						"--spring.rsocket.server.port=0");
+						"--spring.rsocket.server.port=0")
 		) {
 			int port = getLocalRsocketPort(applicationContext);
 
@@ -113,7 +113,7 @@ public class MessagingTests {
 				new SpringApplicationBuilder(MessagingConfiguration.class)
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
-						"--spring.rsocket.server.port=0");
+						"--spring.rsocket.server.port=0")
 		) {
 			int port = getLocalRsocketPort(applicationContext);
 
@@ -143,7 +143,7 @@ public class MessagingTests {
 				new SpringApplicationBuilder(MessagingConfiguration.class)
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
-						"--spring.rsocket.server.port=0");
+						"--spring.rsocket.server.port=0")
 		) {
 			int port = getLocalRsocketPort(applicationContext);
 
@@ -175,7 +175,7 @@ public class MessagingTests {
 				new SpringApplicationBuilder(MessagingConfiguration.class)
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
-						"--spring.rsocket.server.port=0");
+						"--spring.rsocket.server.port=0")
 		) {
 			int port = getLocalRsocketPort(applicationContext);
 
@@ -209,7 +209,7 @@ public class MessagingTests {
 				new SpringApplicationBuilder(MessagingConfiguration.class)
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
-						"--spring.rsocket.server.port=0");
+						"--spring.rsocket.server.port=0")
 		) {
 			int port = getLocalRsocketPort(applicationContext);
 
@@ -239,7 +239,7 @@ public class MessagingTests {
 				new SpringApplicationBuilder(MessagingConfiguration.class)
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
-						"--spring.rsocket.server.port=0");
+						"--spring.rsocket.server.port=0")
 		) {
 			int port = getLocalRsocketPort(applicationContext);
 
@@ -269,7 +269,7 @@ public class MessagingTests {
 				new SpringApplicationBuilder(MessagingConfiguration.class)
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
-						"--spring.rsocket.server.port=0");
+						"--spring.rsocket.server.port=0")
 		) {
 			int port = getLocalRsocketPort(applicationContext);
 
@@ -299,7 +299,7 @@ public class MessagingTests {
 				new SpringApplicationBuilder(MessagingConfiguration.class)
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
-						"--spring.rsocket.server.port=0");
+						"--spring.rsocket.server.port=0")
 		) {
 			int port = getLocalRsocketPort(applicationContext);
 
@@ -329,9 +329,7 @@ public class MessagingTests {
 
 		@Bean
 		public Function<Person, String> pojoToString() {
-			return v -> {
-				return v.getName().toUpperCase();
-			};
+			return v -> v.getName().toUpperCase();
 		}
 
 		@Bean
@@ -345,9 +343,7 @@ public class MessagingTests {
 
 		@Bean
 		public Function<Flux<Message<Map<String, Object>>>, Flux<Message<Map<String, Object>>>> echoMessageMapReactive() {
-			return v -> {
-				return v;
-			};
+			return v -> v;
 		}
 
 		@Bean

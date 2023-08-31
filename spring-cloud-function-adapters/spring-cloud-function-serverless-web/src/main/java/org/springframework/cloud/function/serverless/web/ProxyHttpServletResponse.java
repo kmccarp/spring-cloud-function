@@ -53,7 +53,7 @@ public class ProxyHttpServletResponse implements HttpServletResponse {
 
 	private static final String DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
-	private String defaultCharacterEncoding = WebUtils.DEFAULT_CHARACTER_ENCODING;
+	private final String defaultCharacterEncoding = WebUtils.DEFAULT_CHARACTER_ENCODING;
 
 	private String characterEncoding = this.defaultCharacterEncoding;
 
@@ -349,8 +349,7 @@ public class ProxyHttpServletResponse implements HttpServletResponse {
 	}
 
 	private DateFormat newDateFormat() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
-		return dateFormat;
+		return new SimpleDateFormat(DATE_FORMAT, Locale.US);
 	}
 
 	@Override

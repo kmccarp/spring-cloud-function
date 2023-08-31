@@ -42,8 +42,7 @@ public class BeanFactoryAwarePojoFunctionRegistryTests {
 	private FunctionCatalog configureCatalog() {
 		ApplicationContext context = new SpringApplicationBuilder(SampleFunctionConfiguration.class)
 				.run("--logging.level.org.springframework.cloud.function=DEBUG");
-		FunctionCatalog catalog = context.getBean(FunctionCatalog.class);
-		return catalog;
+		return context.getBean(FunctionCatalog.class);
 	}
 
 	@Test

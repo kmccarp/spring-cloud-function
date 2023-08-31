@@ -99,7 +99,7 @@ class FunctionRSocketMessageHandler extends RSocketMessageHandler {
 			FrameType.REQUEST_CHANNEL);
 
 	FunctionRSocketMessageHandler(FunctionCatalog functionCatalog, FunctionProperties functionProperties, JsonMapper jsonMapper) {
-		setHandlerPredicate((clazz) -> false);
+		setHandlerPredicate(clazz -> false);
 		this.functionCatalog = functionCatalog;
 		this.functionProperties = functionProperties;
 		this.headersField = ReflectionUtils.findField(MessageHeaders.class, "headers");
@@ -302,7 +302,7 @@ class FunctionRSocketMessageHandler extends RSocketMessageHandler {
 		HeadersAwareMetadataExtractor(List<Decoder<?>> decoders) {
 			super(decoders);
 			super.metadataToExtract(MimeTypeUtils.APPLICATION_JSON,
-					new ParameterizedTypeReference<Map<String, String>>() {
+					new ParameterizedTypeReference<>() {
 					}, (jsonMap, outputMap) -> outputMap.putAll(jsonMap)
 			);
 		}

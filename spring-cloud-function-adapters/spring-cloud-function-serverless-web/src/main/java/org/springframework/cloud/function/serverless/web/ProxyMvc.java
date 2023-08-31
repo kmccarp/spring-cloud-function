@@ -63,13 +63,13 @@ import org.springframework.web.servlet.DispatcherServlet;
  */
 public final class ProxyMvc {
 
-	private static Log LOG = LogFactory.getLog(ProxyMvc.class);
+	private static final Log LOG = LogFactory.getLog(ProxyMvc.class);
 
 	private final DispatcherServlet dispatcher;
 
 	private final ConfigurableWebApplicationContext applicationContext;
 
-	private ServletContext servletContext;
+	private final ServletContext servletContext;
 
 	public ConfigurableWebApplicationContext getApplicationContext() {
 		return this.applicationContext;
@@ -329,7 +329,7 @@ public final class ProxyMvc {
 
 		@Override
 		public Enumeration<String> getInitParameterNames() {
-			return Collections.enumeration(new ArrayList<String>());
+			return Collections.enumeration(new ArrayList<>());
 		}
 
 		@Override
