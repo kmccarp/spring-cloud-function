@@ -201,7 +201,7 @@ public class FunctionInvokerHttpTests {
 		public Function<String, Message<String>> function() {
 
 			String payload = "hello";
-			List<Object> li = new ArrayList<Object>(asList(123, "headerThing"));
+			List<Object> li = new ArrayList<>(asList(123, "headerThing"));
 
 			Message<String> msg = MessageBuilder.withPayload(payload).setHeader("multiValueHeader", li)
 				.build();
@@ -217,7 +217,7 @@ public class FunctionInvokerHttpTests {
 
 		@Bean
 		public Function<IncomingRequest, String> function() {
-			return (in) -> "Thank you for sending the message: " + in.message;
+			return in -> "Thank you for sending the message: " + in.message;
 		}
 
 	}
@@ -228,11 +228,9 @@ public class FunctionInvokerHttpTests {
 
 		@Bean
 		public Function<IncomingRequest, Message<OutgoingResponse>> function() {
-			return (in) -> {
-				return MessageBuilder
+			return in -> MessageBuilder
 						.withPayload(new OutgoingResponse("Thank you for sending the message: " + in.message))
 						.setHeader("foo", "bar").build();
-			};
 		}
 	}
 
@@ -242,7 +240,7 @@ public class FunctionInvokerHttpTests {
 
 		@Bean
 		public Consumer<IncomingRequest> function() {
-			return (in) -> System.out.println("Thank you for sending the message: " + in.message);
+			return in -> System.out.println("Thank you for sending the message: " + in.message);
 		}
 
 	}

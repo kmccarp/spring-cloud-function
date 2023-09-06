@@ -39,13 +39,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Daniel Zou
  * @author Mike Eltsufin
  */
-final public class LocalServerTestSupport {
+public final class LocalServerTestSupport {
 
 	private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 
 	private static final String SERVER_READY_STRING = "Started ServerConnector";
 
-	private static AtomicInteger nextPort = new AtomicInteger(8080);
+	private static final AtomicInteger nextPort = new AtomicInteger(8080);
 
 	private LocalServerTestSupport() {
 	}

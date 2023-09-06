@@ -150,7 +150,7 @@ public class FunctionDeployerConfiguration {
 	 * For the current application FunctionProperties already updated and set as a result of EnvironmentPostProcessor
 	 */
 	private ApplicationArguments updateArguments(ApplicationArguments arguments) {
-		List<String> originalArguments =  new ArrayList<String>(Arrays.asList(arguments.getSourceArgs()));
+		List<String> originalArguments =  new ArrayList<>(Arrays.asList(arguments.getSourceArgs()));
 
 		if (arguments.containsOption("function.name")) {
 			originalArguments.add(FunctionProperties.PREFIX + ".definition=" + arguments.getOptionValues("function.name").get(0));
@@ -158,8 +158,7 @@ public class FunctionDeployerConfiguration {
 		if (arguments.containsOption("function.location")) {
 			originalArguments.add(FunctionProperties.PREFIX + ".location=" + arguments.getOptionValues("function.location").get(0));
 		}
-		ApplicationArguments updatedArguments = new DefaultApplicationArguments(originalArguments.toArray(new String[] {}));
-		return updatedArguments;
+		return new DefaultApplicationArguments(originalArguments.toArray(new String[] {}));
 	}
 
 

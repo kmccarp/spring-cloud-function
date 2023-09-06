@@ -54,9 +54,9 @@ import org.springframework.util.ClassUtils;
  */
 public class ProxyServletContext implements ServletContext {
 
-	private Log logger = LogFactory.getLog(ProxyServletContext.class);
+	private final Log logger = LogFactory.getLog(ProxyServletContext.class);
 
-	private static Enumeration<String> EMPTY_ENUM = Collections.enumeration(new ArrayList<String>());
+	private static final Enumeration<String> EMPTY_ENUM = Collections.enumeration(new ArrayList<>());
 
 	@Override
 	public Enumeration<String> getInitParameterNames() {

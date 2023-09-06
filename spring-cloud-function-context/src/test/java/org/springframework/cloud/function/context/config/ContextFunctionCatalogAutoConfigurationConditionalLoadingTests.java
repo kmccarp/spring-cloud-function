@@ -43,7 +43,7 @@ public class ContextFunctionCatalogAutoConfigurationConditionalLoadingTests {
 	@Test
 	void autoConfigDisabledWhenCustomFunctionCatalogExists() {
 		contextRunner.withBean(FunctionCatalog.class, () -> mock(FunctionCatalog.class))
-			.run((context) -> assertThat(context).doesNotHaveBean(FunctionRegistry.class));
+			.run(context -> assertThat(context).doesNotHaveBean(FunctionRegistry.class));
 	}
 
 	@Nested
@@ -51,12 +51,12 @@ public class ContextFunctionCatalogAutoConfigurationConditionalLoadingTests {
 
 		@Test
 		void cloudEventsMessageConverterBeanLoadedWhenCloudEventsOnClasspath() {
-			contextRunner.run((context) -> assertThat(context).hasSingleBean(CloudEventMessageConverter.class));
+			contextRunner.run(context -> assertThat(context).hasSingleBean(CloudEventMessageConverter.class));
 		}
 
 		@Test
 		void cloudEventsMessageConverterBeanNotLoadedWhenCloudEventsNotOnClasspath() {
-			contextRunner.withClassLoader(new FilteredClassLoader(CloudEventMessageConverter.class)).run((context) ->
+			contextRunner.withClassLoader(new FilteredClassLoader(CloudEventMessageConverter.class)).run(context ->
 				assertThat(context).doesNotHaveBean(CloudEventMessageConverter.class));
 		}
 
@@ -64,7 +64,7 @@ public class ContextFunctionCatalogAutoConfigurationConditionalLoadingTests {
 		void customCloudEventsMessageConverterIsRespected() {
 			CloudEventMessageConverter customConverter = mock(CloudEventMessageConverter.class);
 			contextRunner.withBean(CloudEventMessageConverter.class, () -> customConverter)
-				.run((context) -> assertThat(context).getBean(CloudEventMessageConverter.class).isSameAs(customConverter));
+				.run(context -> assertThat(context).getBean(CloudEventMessageConverter.class).isSameAs(customConverter));
 		}
 	}
 
@@ -74,28 +74,28 @@ public class ContextFunctionCatalogAutoConfigurationConditionalLoadingTests {
 		@Test
 		void functionScanConfigEnabledByDefault() {
 			contextRunner.withPropertyValues("spring.cloud.function.scan.packages:" + TestFunction.class.getPackageName())
-				.run((context) -> assertThat(context).hasSingleBean(TestFunction.class));
+				.run(context -> assertThat(context).hasSingleBean(TestFunction.class));
 		}
 
 		@Test
 		void functionScanConfigEnabledWhenEnabledPropertySetToTrue() {
 			contextRunner.withPropertyValues("spring.cloud.function.scan.packages:" + TestFunction.class.getPackageName(),
 					"spring.cloud.function.scan.enabled:true")
-				.run((context) -> assertThat(context).hasSingleBean(TestFunction.class));
+				.run(context -> assertThat(context).hasSingleBean(TestFunction.class));
 		}
 
 		@Test
 		void functionScanConfigEnabledWithScanPackagesPointingToNoFunctions() {
 			contextRunner.withPropertyValues("spring.cloud.function.scan.packages:" + TestFunction.class.getPackageName() + ".faux",
 					"spring.cloud.function.scan.enabled:true")
-				.run((context) -> assertThat(context).doesNotHaveBean(TestFunction.class));
+				.run(context -> assertThat(context).doesNotHaveBean(TestFunction.class));
 		}
 
 		@Test
 		void functionScanConfigDisabledWhenEnabledPropertySetToFalse() {
 			contextRunner.withPropertyValues("spring.cloud.function.scan.packages:" + TestFunction.class.getPackageName(),
 					"spring.cloud.function.scan.enabled:false")
-				.run((context) -> assertThat(context).doesNotHaveBean(TestFunction.class));
+				.run(context -> assertThat(context).doesNotHaveBean(TestFunction.class));
 		}
 
 	}

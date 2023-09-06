@@ -21,10 +21,7 @@ public class DemoApplication {
 
 	@Bean
 	public Function<Person, Employee> hire() {
-		return person -> {
-			Employee employee = new Employee(person);
-			return employee;
-		};
+		return Employee::new;
 	}
 
 	// uncomment while keeping the above POJO function

@@ -56,7 +56,7 @@ public class RSocketAutoConfigurationRoutingTests {
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
 							"--spring.cloud.function.routing-expression=headers.func_name",
 							"--spring.cloud.function.expected-content-type=text/plain",
-							"--spring.rsocket.server.port=0");
+							"--spring.rsocket.server.port=0")
 		) {
 			int port = applicationContext.getEnvironment().getProperty("local.rsocket.server.port", Integer.class);
 
@@ -106,7 +106,7 @@ public class RSocketAutoConfigurationRoutingTests {
 							"--spring.cloud.function.definition=uppercase",
 							"--spring.cloud.function.routing-expression=headers.func_name",
 							"--spring.cloud.function.expected-content-type=text/plain",
-							"--spring.rsocket.server.port=0");
+							"--spring.rsocket.server.port=0")
 		) {
 			int port = applicationContext.getEnvironment().getProperty("local.rsocket.server.port", Integer.class);
 
@@ -156,7 +156,7 @@ public class RSocketAutoConfigurationRoutingTests {
 							"--spring.cloud.function.definition=uppercase",
 							"--spring.cloud.function.routing-expression=headers.func_name",
 							"--spring.cloud.function.expected-content-type=text/plain",
-							"--spring.rsocket.server.port=0");
+							"--spring.rsocket.server.port=0")
 		) {
 			int port = applicationContext.getEnvironment().getProperty("local.rsocket.server.port", Integer.class);
 			RSocketRequester.Builder rsocketRequesterBuilder =
@@ -189,8 +189,8 @@ public class RSocketAutoConfigurationRoutingTests {
 		@Bean
 		public Function<Message<String>, String> uppercaseMessage() {
 			return msg -> {
-				assertThat(msg.getHeaders()
-						.get(DestinationPatternsMessageCondition.LOOKUP_DESTINATION_HEADER)).toString().equals("uppercase");
+				"uppercase".equals(assertThat(msg.getHeaders()
+						.get(DestinationPatternsMessageCondition.LOOKUP_DESTINATION_HEADER)).toString());
 				assertThat(msg.getHeaders()
 						.get(FunctionRSocketMessageHandler.RECONCILED_LOOKUP_DESTINATION_HEADER)).toString().equals(RoutingFunction.FUNCTION_NAME);
 				return msg.getPayload().toUpperCase();
