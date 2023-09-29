@@ -49,7 +49,7 @@ public class MessageRoutingCallbackRSocketTests {
 					.web(WebApplicationType.NONE)
 					.run("--logging.level.org.springframework.cloud.function=DEBUG",
 							"--spring.cloud.function.expected-content-type=text/plain",
-							"--spring.rsocket.server.port=0");
+							"--spring.rsocket.server.port=0")
 		) {
 			RSocketRequester.Builder rsocketRequesterBuilder =
 				applicationContext.getBean(RSocketRequester.Builder.class);

@@ -47,7 +47,7 @@ import org.springframework.util.StringUtils;
  */
 public class CloudEventsFunctionInvocationHelper implements FunctionInvocationHelper<Message<?>>, ApplicationContextAware {
 
-	private Log logger = LogFactory.getLog(this.getClass());
+	private final Log logger = LogFactory.getLog(this.getClass());
 
 	private ConfigurableApplicationContext applicationContext;
 
@@ -55,7 +55,7 @@ public class CloudEventsFunctionInvocationHelper implements FunctionInvocationHe
 
 	private CompositeMessageConverter messageConverter;
 
-	private final Class<?> CLOUD_EVENT_CLASS;
+	private static final Class<?> CLOUD_EVENT_CLASS;
 
 	CloudEventsFunctionInvocationHelper(@Nullable CloudEventHeaderEnricher cloudEventHeadersProvider) {
 		this.cloudEventAttributesProvider = cloudEventHeadersProvider;
@@ -152,6 +152,6 @@ public class CloudEventsFunctionInvocationHelper implements FunctionInvocationHe
 	private String getApplicationName() {
 		ConfigurableEnvironment environment = this.applicationContext.getEnvironment();
 		String name = environment.getProperty("spring.application.name");
-		return (StringUtils.hasText(name) ? name : "");
+		return StringUtils.hasText(name) ? name : "";
 	}
 }

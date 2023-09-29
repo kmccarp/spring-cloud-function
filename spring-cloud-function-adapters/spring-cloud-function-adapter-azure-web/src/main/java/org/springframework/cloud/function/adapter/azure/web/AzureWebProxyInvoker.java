@@ -50,7 +50,7 @@ import org.springframework.util.StringUtils;
  */
 public class AzureWebProxyInvoker implements FunctionInstanceInjector {
 
-	private static Log logger = LogFactory.getLog(AzureWebProxyInvoker.class);
+	private static final Log logger = LogFactory.getLog(AzureWebProxyInvoker.class);
 
 	private static final String AZURE_WEB_ADAPTER_NAME = "AzureWebAdapter";
 	private static final String AZURE_WEB_ADAPTER_ROUTE = AZURE_WEB_ADAPTER_NAME

@@ -75,17 +75,17 @@ class ServerlessWebApplication extends SpringApplication {
 
 	private static final Log logger = LogFactory.getLog(ServerlessWebApplication.class);
 
-	private ApplicationStartup applicationStartup = ApplicationStartup.DEFAULT;
+	private final ApplicationStartup applicationStartup = ApplicationStartup.DEFAULT;
 
-	private ApplicationContextFactory applicationContextFactory = ApplicationContextFactory.DEFAULT;
+	private final ApplicationContextFactory applicationContextFactory = ApplicationContextFactory.DEFAULT;
 
 	private boolean allowCircularReferences;
 
 	private boolean allowBeanDefinitionOverriding;
 
-	private boolean logStartupInfo = true;
+	private final boolean logStartupInfo = true;
 
-	private boolean lazyInitialization = false;
+	private boolean lazyInitialization;
 
 	private WebApplicationType webApplicationType;
 
@@ -153,7 +153,7 @@ class ServerlessWebApplication extends SpringApplication {
 	}
 
 	private Banner printBanner(ConfigurableEnvironment environment) {
-		ResourceLoader resourceLoader = (this.getResourceLoader() != null) ? this.getResourceLoader()
+		ResourceLoader resourceLoader = this.getResourceLoader() != null ? this.getResourceLoader()
 				: new DefaultResourceLoader(null);
 		SpringApplicationBannerPrinter bannerPrinter = new SpringApplicationBannerPrinter(resourceLoader, new SpringAwsBanner());
 		return bannerPrinter.print(environment, this.getMainApplicationClass(), System.out);
@@ -163,7 +163,7 @@ class ServerlessWebApplication extends SpringApplication {
 	private DefaultBootstrapContext createBootstrapContext() {
 		DefaultBootstrapContext bootstrapContext = new DefaultBootstrapContext();
 		ArrayList<BootstrapRegistryInitializer> bootstrapRegistryInitializers = new ArrayList<>(getSpringFactoriesInstances(BootstrapRegistryInitializer.class));
-		bootstrapRegistryInitializers.forEach((initializer) -> initializer.initialize(bootstrapContext));
+		bootstrapRegistryInitializers.forEach(initializer -> initializer.initialize(bootstrapContext));
 		return bootstrapContext;
 	}
 
@@ -311,7 +311,7 @@ class ServerlessWebApplication extends SpringApplication {
 
 			@Override
 			public void printBanner(Environment environment, Class<?> sourceClass, PrintStream out) {
-				sourceClass = (sourceClass != null) ? sourceClass : this.sourceClass;
+				sourceClass = sourceClass != null ? sourceClass : this.sourceClass;
 				this.banner.printBanner(environment, sourceClass, out);
 			}
 
@@ -339,7 +339,7 @@ class ServerlessWebApplication extends SpringApplication {
 				printStream.println(line);
 			}
 			String version = SpringBootVersion.getVersion();
-			version = (version != null) ? " (v" + version + ")" : "";
+			version = version != null ? " (v" + version + ")" : "";
 			StringBuilder padding = new StringBuilder();
 			while (padding.length() < STRAP_LINE_SIZE - (version.length() + SPRING_BOOT.length())) {
 				padding.append(" ");
@@ -365,8 +365,8 @@ class ServerlessWebApplication extends SpringApplication {
 		}
 
 		void starting(ConfigurableBootstrapContext bootstrapContext, Class<?> mainApplicationClass) {
-			doWithListeners("spring.boot.application.starting", (listener) -> listener.starting(bootstrapContext),
-					(step) -> {
+			doWithListeners("spring.boot.application.starting", listener -> listener.starting(bootstrapContext),
+					step -> {
 						if (mainApplicationClass != null) {
 							step.tag("mainApplicationClass", mainApplicationClass.getName());
 						}
@@ -375,15 +375,15 @@ class ServerlessWebApplication extends SpringApplication {
 
 		void environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
 			doWithListeners("spring.boot.application.environment-prepared",
-					(listener) -> listener.environmentPrepared(bootstrapContext, environment));
+					listener -> listener.environmentPrepared(bootstrapContext, environment));
 		}
 
 		void contextPrepared(ConfigurableApplicationContext context) {
-			doWithListeners("spring.boot.application.context-prepared", (listener) -> listener.contextPrepared(context));
+			doWithListeners("spring.boot.application.context-prepared", listener -> listener.contextPrepared(context));
 		}
 
 		void contextLoaded(ConfigurableApplicationContext context) {
-			doWithListeners("spring.boot.application.context-loaded", (listener) -> listener.contextLoaded(context));
+			doWithListeners("spring.boot.application.context-loaded", listener -> listener.contextLoaded(context));
 		}
 		private void doWithListeners(String stepName, Consumer<SpringApplicationRunListener> listenerAction) {
 			doWithListeners(stepName, listenerAction, null);

@@ -46,7 +46,7 @@ import org.springframework.util.StringUtils;
  */
 public class SmartCompositeMessageConverter extends CompositeMessageConverter {
 
-	private Log logger = LogFactory.getLog(this.getClass());
+	private final Log logger = LogFactory.getLog(this.getClass());
 
 	public SmartCompositeMessageConverter(Collection<MessageConverter> converters) {
 		super(converters);
@@ -96,9 +96,9 @@ public class SmartCompositeMessageConverter extends CompositeMessageConverter {
 					MessageConverter converter = (MessageConverter) iterator.next();
 					if (!converter.getClass().getName().endsWith("ApplicationJsonMessageMarshallingConverter")) { // TODO Stream stuff, needs to be removed
 						Message<?> m  = MessageBuilder.withPayload(item).copyHeaders(message.getHeaders()).build(); // TODO Message creating may be expensive
-						Object conversionResult = (converter instanceof SmartMessageConverter & genericItemRawType != genericItemType ?
+						Object conversionResult = converter instanceof SmartMessageConverter & genericItemRawType != genericItemType ?
 								((SmartMessageConverter) converter).fromMessage(m, genericItemRawType, genericItemType) :
-								converter.fromMessage(m, genericItemRawType));
+								converter.fromMessage(m, genericItemRawType);
 						if (conversionResult != null) {
 							resultList.add(conversionResult);
 							isConverted = true;
@@ -111,9 +111,9 @@ public class SmartCompositeMessageConverter extends CompositeMessageConverter {
 		else {
 			for (MessageConverter converter : getConverters()) {
 				if (!converter.getClass().getName().endsWith("ApplicationJsonMessageMarshallingConverter")) { // TODO Stream stuff, needs to be removed
-					result = (converter instanceof SmartMessageConverter ?
+					result = converter instanceof SmartMessageConverter ?
 							((SmartMessageConverter) converter).fromMessage(message, targetClass, conversionHint) :
-							converter.fromMessage(message, targetClass));
+							converter.fromMessage(message, targetClass);
 					if (result != null) {
 						return result;
 					}

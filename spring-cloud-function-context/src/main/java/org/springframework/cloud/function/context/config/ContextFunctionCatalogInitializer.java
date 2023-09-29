@@ -121,14 +121,14 @@ public class ContextFunctionCatalogInitializer implements ApplicationContextInit
 			if (this.context.getBeanFactory().getBeanNamesForType(PropertySourcesPlaceholderConfigurer.class, false,
 					false).length == 0) {
 				this.context.registerBean(PropertySourcesPlaceholderConfigurer.class,
-						() -> PropertyPlaceholderAutoConfiguration.propertySourcesPlaceholderConfigurer());
+						PropertyPlaceholderAutoConfiguration::propertySourcesPlaceholderConfigurer);
 			}
 
 			if (!this.context.getBeanFactory()
 					.containsBeanDefinition(AnnotationConfigUtils.CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 				// Switch off the ConfigurationClassPostProcessor
 				this.context.registerBean(AnnotationConfigUtils.CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME,
-						DummyProcessor.class, () -> new DummyProcessor());
+						DummyProcessor.class, DummyProcessor::new);
 				// But switch on other annotation processing
 				AnnotationConfigUtils.registerAnnotationConfigProcessors(this.context);
 			}
@@ -184,7 +184,7 @@ public class ContextFunctionCatalogInitializer implements ApplicationContextInit
 					ConversionService conversionService = new DefaultConversionService();
 					return new SimpleFunctionRegistry(conversionService, messageConverter, this.context.getBean(JsonMapper.class));
 				});
-				this.context.registerBean(FunctionProperties.class, () -> new FunctionProperties());
+				this.context.registerBean(FunctionProperties.class, FunctionProperties::new);
 				this.context.registerBean(FunctionRegistrationPostProcessor.class,
 						() -> new FunctionRegistrationPostProcessor(this.context.getAutowireCapableBeanFactory()
 								.getBeanProvider(FunctionRegistration.class)));

@@ -126,14 +126,14 @@ public class FunctionInvoker implements HttpFunction, RawBackgroundFunction {
 			for (Entry<String, Object> header : headers.entrySet()) {
 				Object values = header.getValue();
 				if (values instanceof Collection<?>) {
-					String headerValue = ((Collection<?>) values).stream().map(item -> item.toString()).collect(Collectors.joining(","));
+					String headerValue = ((Collection<?>) values).stream().map(Object::toString).collect(Collectors.joining(","));
 					httpResponse.appendHeader(header.getKey(), headerValue);
 				}
 				else {
 					httpResponse.appendHeader(header.getKey(), header.getValue().toString());
 				}
 			}
-			httpRequest.getContentType().ifPresent(contentType -> httpResponse.setContentType(contentType));
+			httpRequest.getContentType().ifPresent(httpResponse::setContentType);
 
 			if (headers.containsKey(HTTP_STATUS_CODE)) {
 				if (headers.get(HTTP_STATUS_CODE) instanceof Integer) {
