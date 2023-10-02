@@ -117,14 +117,13 @@ public abstract class FunctionContextUtils {
 		Class<?>[] params = getParamTypesFromBeanDefinitionFactory(factory, definition);
 		Method method = ReflectionUtils.findMethod(factory, methodName,
 				params);
-		Type type = method.getGenericReturnType();
-		return type;
+		return method.getGenericReturnType();
 	}
 
 	private static Method[] getCandidateMethods(final Class<?> factoryClass,
 			final RootBeanDefinition mbd) {
-		return (mbd.isNonPublicAccessAllowed()
+		return mbd.isNonPublicAccessAllowed()
 				? ReflectionUtils.getAllDeclaredMethods(factoryClass)
-				: factoryClass.getMethods());
+				: factoryClass.getMethods();
 	}
 }

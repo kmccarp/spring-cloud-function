@@ -44,7 +44,7 @@ public class PetsController {
 
 		Pet dbPet = newPet;
 		dbPet.setId(UUID.randomUUID().toString());
-		DeferredResult<Pet> result = new DeferredResult<Pet>();
+		DeferredResult<Pet> result = new DeferredResult<>();
 		result.setResult(dbPet);
 		return result;
 	}
@@ -83,7 +83,7 @@ public class PetsController {
 
 	@RequestMapping(path = "/pets/{petId}", method = RequestMethod.GET)
 	public Pet listPets(@PathVariable String petId) {
-		if (petId.equals("2")) {
+		if ("2".equals(petId)) {
 			throw new DogNotFoundException();
 		}
 		Pet newPet = new Pet();

@@ -41,9 +41,9 @@ import org.springframework.util.CollectionUtils;
  */
 public class AzureFunctionInstanceInjector implements FunctionInstanceInjector {
 
-	private static Log logger = LogFactory.getLog(AzureFunctionInstanceInjector.class);
+	private static final Log logger = LogFactory.getLog(AzureFunctionInstanceInjector.class);
 
-	private static ConfigurableApplicationContext APPLICATION_CONTEXT;
+	private static ConfigurableApplicationContext applicationContext;
 
 	/**
 	 * This method is called by the Azure Java Worker on every function invocation. The Worker sends in the classes
@@ -65,7 +65,7 @@ public class AzureFunctionInstanceInjector implements FunctionInstanceInjector {
 
 			initialize();
 
-			Map<String, T> azureFunctionBean = APPLICATION_CONTEXT.getBeansOfType(functionClass);
+			Map<String, T> azureFunctionBean = applicationContext.getBeansOfType(functionClass);
 			if (CollectionUtils.isEmpty(azureFunctionBean)) {
 				throw new IllegalStateException(
 						"Failed to retrieve Bean instance for: " + functionClass
@@ -74,8 +74,8 @@ public class AzureFunctionInstanceInjector implements FunctionInstanceInjector {
 			return azureFunctionBean.entrySet().iterator().next().getValue();
 		}
 		catch (Exception e) {
-			if (APPLICATION_CONTEXT != null) {
-				APPLICATION_CONTEXT.close();
+			if (applicationContext != null) {
+				applicationContext.close();
 			}
 			throw new IllegalStateException("Failed to initialize", e);
 		}
@@ -86,10 +86,10 @@ public class AzureFunctionInstanceInjector implements FunctionInstanceInjector {
 	 */
 	private static void initialize() {
 		synchronized (AzureFunctionInstanceInjector.class.getName()) {
-			if (APPLICATION_CONTEXT == null) {
+			if (applicationContext == null) {
 				Class<?> springConfigurationClass = FunctionClassUtils.getStartClass();
 				logger.info("Initializing: " + springConfigurationClass);
-				APPLICATION_CONTEXT = springApplication(springConfigurationClass).run();
+				applicationContext = springApplication(springConfigurationClass).run();
 			}
 		}
 	}

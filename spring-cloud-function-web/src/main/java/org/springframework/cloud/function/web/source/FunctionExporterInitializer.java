@@ -80,7 +80,7 @@ class FunctionExporterInitializer implements ApplicationContextInitializer<Gener
 	}
 
 	private void registerExport(GenericApplicationContext context) {
-		context.registerBean(ExporterProperties.class, () -> new ExporterProperties());
+		context.registerBean(ExporterProperties.class, ExporterProperties::new);
 		context.registerBean(FunctionExporterAutoConfiguration.class,
 				() -> new FunctionExporterAutoConfiguration(context.getBean(ExporterProperties.class)));
 		if (context.getBeanFactory().getBeanNamesForType(DestinationResolver.class, false, false).length == 0) {
