@@ -69,8 +69,8 @@ class MessageAwareJsonEncoder extends AbstractEncoder<Object> {
 	public boolean canEncode(ResolvableType elementType, MimeType mimeType) {
 		boolean canEncode = mimeType != null && mimeType.isCompatibleWith(MimeTypeUtils.APPLICATION_JSON);
 		if (canEncode && this.isClient) {
-			canEncode = (FunctionTypeUtils.isMessage(elementType.getType())
-					|| Map.class.isAssignableFrom(FunctionTypeUtils.getRawType(elementType.getType())));
+			canEncode = FunctionTypeUtils.isMessage(elementType.getType())
+					|| Map.class.isAssignableFrom(FunctionTypeUtils.getRawType(elementType.getType()));
 		}
 		return canEncode;
 	}

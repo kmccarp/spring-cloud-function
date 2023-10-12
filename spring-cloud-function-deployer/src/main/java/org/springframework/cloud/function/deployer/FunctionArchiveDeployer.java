@@ -68,7 +68,7 @@ import org.springframework.util.StringUtils;
  */
 class FunctionArchiveDeployer extends JarLauncher {
 
-	private static Log logger = LogFactory.getLog(FunctionArchiveDeployer.class);
+	private static final Log logger = LogFactory.getLog(FunctionArchiveDeployer.class);
 
 	private final StandardEvaluationContext evalContext = new StandardEvaluationContext();
 
@@ -322,7 +322,7 @@ class FunctionArchiveDeployer extends JarLauncher {
 
 	@SuppressWarnings("unchecked")
 	private Map<String, Object> discoverBeanFunctions() {
-		Map<String, Object> allFunctions = new HashMap<String, Object>();
+		Map<String, Object> allFunctions = new HashMap<>();
 		if (evalContext.lookupVariable("context") != null) { // no start-class uber jars
 			Expression parsed = new SpelExpressionParser()
 					.parseExpression("#context.getBeansOfType(T(java.util.function.Function))");

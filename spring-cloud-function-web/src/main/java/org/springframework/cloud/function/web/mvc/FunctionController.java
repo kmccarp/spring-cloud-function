@@ -80,7 +80,7 @@ public class FunctionController {
 				MultiValueMap<String, MultipartFile> multiFileMap = ((StandardMultipartHttpServletRequest) ((ServletWebRequest) request)
 															.getRequest()).getMultiFileMap();
 				if (!CollectionUtils.isEmpty(multiFileMap)) {
-					List<Message<MultipartFile>> files = multiFileMap.values().stream().flatMap(v -> v.stream())
+					List<Message<MultipartFile>> files = multiFileMap.values().stream().flatMap(java.util.Collection::stream)
 							.map(file -> MessageBuilder.withPayload(file).copyHeaders(wrapper.getHeaders()).build())
 							.collect(Collectors.toList());
 					FunctionInvocationWrapper function = wrapper.getFunction();
@@ -88,9 +88,7 @@ public class FunctionController {
 					Publisher<?> result = (Publisher<?>) function.apply(Flux.fromIterable(files));
 					BodyBuilder builder = ResponseEntity.ok();
 					if (result instanceof Flux) {
-						result = Flux.from(result).map(message -> {
-							return message instanceof Message ? ((Message<?>) message).getPayload() : message;
-						}).collectList();
+						result = Flux.from(result).map(message -> message instanceof Message ? ((Message<?>) message).getPayload() : message).collectList();
 					}
 					return Mono.from(result).flatMap(body -> Mono.just(builder.body(body)));
 				}

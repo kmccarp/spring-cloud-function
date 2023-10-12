@@ -53,20 +53,22 @@ public class Config {
 			try {
 				Map<String, String> map = mapper.fromJson(value, Map.class);
 
-				if(map != null)
+				if (map != null) {
 					map.forEach((k, v) -> map.put(k, v != null ? v.toUpperCase() : null));
+				}
 
-				if(context != null)
-					context.getLogger().info(new StringBuilder().append("Function: ")
-							.append(context.getFunctionName()).append(" is uppercasing ").append(value.toString()).toString());
+				if (context != null) {
+					context.getLogger().info("Function: " + context.getFunctionName() + " is uppercasing " + value);
+				}
 
 				return mapper.toString(map);
 			} catch (Exception e) {
 				e.printStackTrace();
-				if(context != null)
+				if (context != null) {
 					context.getLogger().severe("Function could not parse incoming request");
+				}
 
-				return ("Function error: - bad request");
+				return "Function error: - bad request";
 			}
 		};
 	}

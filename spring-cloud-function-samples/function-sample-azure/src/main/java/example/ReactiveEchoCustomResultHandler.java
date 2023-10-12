@@ -54,9 +54,9 @@ public class ReactiveEchoCustomResultHandler extends FunctionInvoker<List<String
 	) {
 		functionResult
 			.doFirst(() -> executionContext.getLogger().info("BEGIN echo post-processing work ..."))
-			.mapNotNull((v) -> v.toString().toUpperCase())
-			.doFinally((signalType) -> executionContext.getLogger().info("END echo post-processing work"))
-			.subscribe((v) -> executionContext.getLogger().info("   " + v));
+			.mapNotNull(v -> v.toString().toUpperCase())
+			.doFinally(signalType -> executionContext.getLogger().info("END echo post-processing work"))
+			.subscribe(v -> executionContext.getLogger().info("   " + v));
 		return "Kicked off job for " + rawInputs;
 	}
 

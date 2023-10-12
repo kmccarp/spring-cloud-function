@@ -83,8 +83,8 @@ import static org.springframework.web.reactive.function.server.ServerResponse.st
  */
 public class FunctionEndpointInitializer implements ApplicationContextInitializer<GenericApplicationContext> {
 
-	private static boolean webflux = ClassUtils
-			.isPresent("org.springframework.web.reactive.function.server.RouterFunction", null);
+	private static final boolean webflux = ClassUtils
+	.isPresent("org.springframework.web.reactive.function.server.RouterFunction", null);
 
 	@Override
 	public void initialize(GenericApplicationContext context) {
@@ -118,10 +118,10 @@ public class FunctionEndpointInitializer implements ApplicationContextInitialize
 	}
 
 	private DefaultErrorWebExceptionHandler errorHandler(GenericApplicationContext context) {
-		context.registerBean(ErrorAttributes.class, () -> new DefaultErrorAttributes());
-		context.registerBean(ErrorProperties.class, () -> new ErrorProperties());
+		context.registerBean(ErrorAttributes.class, DefaultErrorAttributes::new);
+		context.registerBean(ErrorProperties.class, ErrorProperties::new);
 
-		context.registerBean(Resources.class, () -> new Resources());
+		context.registerBean(Resources.class, Resources::new);
 		DefaultErrorWebExceptionHandler handler = new DefaultErrorWebExceptionHandler(
 				context.getBeansOfType(ErrorAttributes.class).values().iterator().next(), context.getBean(Resources.class),
 				context.getBean(ErrorProperties.class), context);
@@ -167,7 +167,7 @@ public class FunctionEndpointInitializer implements ApplicationContextInitialize
 				ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
 				HttpServer httpServer = HttpServer.create().host(address).port(port).handle(adapter);
 				Thread thread = new Thread(
-						() -> httpServer.bindUntilJavaShutdown(Duration.ofSeconds(60), (server) -> callback(server, context)),
+						() -> httpServer.bindUntilJavaShutdown(Duration.ofSeconds(60), server -> callback(server, context)),
 						"server-startup");
 				thread.setDaemon(false);
 				thread.start();
@@ -200,7 +200,7 @@ public class FunctionEndpointInitializer implements ApplicationContextInitialize
 
 class FunctionEndpointFactory {
 
-	private static Log logger = LogFactory.getLog(FunctionEndpointFactory.class);
+	private static final Log logger = LogFactory.getLog(FunctionEndpointFactory.class);
 
 	private final FunctionCatalog functionCatalog;
 

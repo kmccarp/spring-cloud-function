@@ -217,7 +217,7 @@ public class BeanFactoryAwareFunctionRegistry extends SimpleFunctionRegistry imp
 
 		Function wrapperFunction = message -> {
 			Object payload = ((Message) message).getPayload();
-			if (payload.getClass().getName().equals("org.springframework.kafka.support.KafkaNull")) {
+			if ("org.springframework.kafka.support.KafkaNull".equals(payload.getClass().getName())) {
 				payload = null;
 			}
 			if (userFunction instanceof BiConsumer) {

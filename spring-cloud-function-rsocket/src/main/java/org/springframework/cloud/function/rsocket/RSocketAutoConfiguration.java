@@ -52,7 +52,7 @@ class RSocketAutoConfiguration {
 
 		FunctionRSocketMessageHandler rsocketMessageHandler = new FunctionRSocketMessageHandler(functionCatalog, functionProperties, jsonMapper);
 		rsocketMessageHandler.setRSocketStrategies(rSocketStrategies);
-		customizers.orderedStream().forEach((customizer) -> customizer.customize(rsocketMessageHandler));
+		customizers.orderedStream().forEach(customizer -> customizer.customize(rsocketMessageHandler));
 		return rsocketMessageHandler;
 	}
 }
