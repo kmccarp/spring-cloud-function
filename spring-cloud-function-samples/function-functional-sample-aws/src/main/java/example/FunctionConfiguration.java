@@ -25,7 +25,7 @@ public class FunctionConfiguration implements ApplicationContextInitializer<Gene
 
     @Override
     public void initialize(GenericApplicationContext context) {
-    	Function<String, String> function = (str) -> str + str.toUpperCase();
+    	Function<String, String> function = str -> str + str.toUpperCase();
     	
     	context.registerBean("uppercase", FunctionRegistration.class,
 				() -> new FunctionRegistration<>(function).type(FunctionTypeUtils.functionType(String.class, String.class)));

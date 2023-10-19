@@ -46,10 +46,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class HttpFunctionInvokerTests {
 
-	private HttpFunctionInvoker<?> handler = null;
+	private HttpFunctionInvoker<?> handler;
 
 	<I> HttpFunctionInvoker<I> handler(Class<?> config) {
-		HttpFunctionInvoker<I> handler = new HttpFunctionInvoker<I>(
+		HttpFunctionInvoker<I> handler = new HttpFunctionInvoker<>(
 				config);
 		this.handler = handler;
 		return handler;
@@ -59,7 +59,7 @@ public class HttpFunctionInvokerTests {
 	public void testWithBody() {
 		HttpFunctionInvoker<Foo> handler = handler(
 				FunctionMessageBodyConfig.class);
-		HttpRequestMessageStub<Foo> request = new HttpRequestMessageStub<Foo>();
+		HttpRequestMessageStub<Foo> request = new HttpRequestMessageStub<>();
 		request.setBody(new Foo("foo"));
 
 		HttpResponseMessage response = handler.handleRequest(request,
@@ -75,7 +75,7 @@ public class HttpFunctionInvokerTests {
 	public void testWithRequestParameters() throws URISyntaxException {
 		HttpFunctionInvoker<Foo> handler = handler(
 				FunctionMessageEchoReqParametersConfig.class);
-		HttpRequestMessageStub<Foo> request = new HttpRequestMessageStub<Foo>();
+		HttpRequestMessageStub<Foo> request = new HttpRequestMessageStub<>();
 		request.setUri(new URI("http://localhost:8080/pathValue"));
 		request.setHeaders(Collections.singletonMap("test-header", "headerValue"));
 		request.setQueryParameters(Collections.singletonMap("query", "queryValue"));
@@ -96,7 +96,7 @@ public class HttpFunctionInvokerTests {
 	public void testWithEmptyBody() {
 		HttpFunctionInvoker<Foo> handler = handler(
 				FunctionMessageConsumerConfig.class);
-		HttpRequestMessageStub<Foo> request = new HttpRequestMessageStub<Foo>();
+		HttpRequestMessageStub<Foo> request = new HttpRequestMessageStub<>();
 
 		HttpResponseMessage response = handler.handleRequest(request,
 				new TestExecutionContext("uppercase"));
@@ -119,11 +119,11 @@ public class HttpFunctionInvokerTests {
 
 		@Bean
 		public Function<Message<Foo>, Message<Bar>> function() {
-			return (foo -> {
+			return foo -> {
 				Map<String, Object> headers = new HashMap<>();
 				return new GenericMessage<>(
 						new Bar(foo.getPayload().getValue().toUpperCase()), headers);
-			});
+			};
 		}
 
 	}
@@ -134,14 +134,14 @@ public class HttpFunctionInvokerTests {
 
 		@Bean
 		public Function<Message<Void>, Message<Bar>> function() {
-			return (message -> {
+			return message -> {
 				Map<String, Object> headers = new HashMap<>();
 				headers.put("path", message.getHeaders().get("path"));
 				headers.put("query", message.getHeaders().get("query"));
 				headers.put("test-header", message.getHeaders().get("test-header"));
 				headers.put("httpMethod", message.getHeaders().get("httpMethod"));
 				return new GenericMessage<>(new Bar("body"), headers);
-			});
+			};
 		}
 
 	}
@@ -152,8 +152,8 @@ public class HttpFunctionInvokerTests {
 
 		@Bean
 		public Consumer<Message<Foo>> function() {
-			return (foo -> {
-			});
+			return foo -> {
+			};
 		}
 
 	}

@@ -472,9 +472,7 @@ public class HttpPostIntegrationTests {
 		@Bean
 		@Qualifier("foos")
 		public Function<String, Foo> qualifier() {
-			return value -> {
-				return new Foo("[" + value.trim().toUpperCase() + "]");
-			};
+			return value -> new Foo("[" + value.trim().toUpperCase() + "]");
 		}
 
 		@Bean
@@ -524,7 +522,7 @@ public class HttpPostIntegrationTests {
 
 		@Bean
 		public Function<Flux<List<String>>, Flux<String>> fluxCollectionEcho() {
-			return flux -> flux.flatMap(v -> Flux.fromIterable(v));
+			return flux -> flux.flatMap(reactor.core.publisher.Flux::fromIterable);
 		}
 
 	}

@@ -87,7 +87,7 @@ public class ProxyAsyncContext implements AsyncContext {
 
 	@Override
 	public boolean hasOriginalRequestAndResponse() {
-		return (this.request instanceof ProxyHttpServletRequest && this.response instanceof ProxyHttpServletResponse);
+		return this.request instanceof ProxyHttpServletRequest && this.response instanceof ProxyHttpServletResponse;
 	}
 
 	@Override

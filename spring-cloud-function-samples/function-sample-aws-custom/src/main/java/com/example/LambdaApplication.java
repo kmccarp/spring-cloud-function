@@ -21,7 +21,7 @@ public class LambdaApplication
 	public Function<String, String> uppercase() {
 		return value -> {
 			logger.info("Processing: " + value);
-			if (value.equals("error")) {
+			if ("error".equals(value)) {
 				throw new IllegalArgumentException("Intentional");
 			}
 			return value.toUpperCase();

@@ -68,8 +68,7 @@ abstract class DeployerContextUtils {
 		Class<?>[] params = getParamTypes(factory, definition);
 		Method method = ReflectionUtils.findMethod(factory, methodName,
 				params);
-		Type type = method.getGenericReturnType();
-		return type;
+		return method.getGenericReturnType();
 	}
 
 	private static Class<?>[] getParamTypes(Class<?> factory,
@@ -96,16 +95,16 @@ abstract class DeployerContextUtils {
 			return AccessController.doPrivileged(new PrivilegedAction<Method[]>() {
 				@Override
 				public Method[] run() {
-					return (mbd.isNonPublicAccessAllowed()
+					return mbd.isNonPublicAccessAllowed()
 							? ReflectionUtils.getAllDeclaredMethods(factoryClass)
-							: factoryClass.getMethods());
+							: factoryClass.getMethods();
 				}
 			});
 		}
 		else {
-			return (mbd.isNonPublicAccessAllowed()
+			return mbd.isNonPublicAccessAllowed()
 					? ReflectionUtils.getAllDeclaredMethods(factoryClass)
-					: factoryClass.getMethods());
+					: factoryClass.getMethods();
 		}
 	}
 

@@ -45,10 +45,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class FunctionInvokerTests {
 
-	private FunctionInvoker<?, ?> handler = null;
+	private FunctionInvoker<?, ?> handler;
 
 	<I, O> FunctionInvoker<I, O> handler(Class<?> config) {
-		FunctionInvoker<I, O> handler = new FunctionInvoker<I, O>(
+		FunctionInvoker<I, O> handler = new FunctionInvoker<>(
 				config);
 		this.handler = handler;
 		return handler;
@@ -215,7 +215,7 @@ public class FunctionInvokerTests {
 
 		@Bean
 		public Consumer<String> consumer() {
-			return (v) -> consumerResult = v;
+			return v -> consumerResult = v;
 		}
 
 	}
@@ -268,11 +268,8 @@ public class FunctionInvokerTests {
 
 		@Bean
 		public Function<List<Foo>, List<Bar>> uppercase() {
-			return foos -> {
-				List<Bar> bars = foos.stream().map(foo -> new Bar(foo.getValue().toUpperCase()))
+			return foos -> foos.stream().map(foo -> new Bar(foo.getValue().toUpperCase()))
 						.collect(Collectors.toList());
-				return bars;
-			};
 		}
 
 	}

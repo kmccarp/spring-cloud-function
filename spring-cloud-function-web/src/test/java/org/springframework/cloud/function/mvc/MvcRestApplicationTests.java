@@ -352,7 +352,7 @@ public class MvcRestApplicationTests {
 		@GetMapping("/bang")
 		public Flux<?> bang() {
 			return Flux.fromArray(new String[] { "foo", "bar" }).map(value -> {
-				if (value.equals("bar")) {
+				if ("bar".equals(value)) {
 					throw new RuntimeException("Bar");
 				}
 				return value;

@@ -55,7 +55,7 @@ public class ProxyErrorController {
 		model.put("timestamp", df.format(new Date()));
 		response.setStatus(status.value());
 		ModelAndView modelAndView = resolveErrorView(request, response, status, model);
-		return (modelAndView != null) ? modelAndView : new ModelAndView("error", model);
+		return modelAndView != null ? modelAndView : new ModelAndView("error", model);
 	}
 
 	protected ModelAndView resolveErrorView(HttpServletRequest request, HttpServletResponse response, HttpStatus status,

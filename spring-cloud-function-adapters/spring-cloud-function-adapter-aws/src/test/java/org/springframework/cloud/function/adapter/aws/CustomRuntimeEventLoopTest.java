@@ -39,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CustomRuntimeEventLoopTest {
 
-	private String API_EVENT = "{\n"
+	private static final String API_EVENT = "{\n"
 			+ "    \"version\": \"1.0\",\n"
 			+ "    \"resource\": \"$default\",\n"
 			+ "    \"path\": \"/question\",\n"
@@ -251,9 +251,7 @@ public class CustomRuntimeEventLoopTest {
 
 		@Bean
 		public Function<Flux<GeoLocation>, Flux<GeoLocation>> echoFlux() {
-			return flux -> flux.map(g -> {
-				return new GeoLocation(g.longitude(), g.latitude());
-			});
+			return flux -> flux.map(g -> new GeoLocation(g.longitude(), g.latitude()));
 		}
 	}
 

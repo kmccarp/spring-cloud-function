@@ -68,7 +68,7 @@ class CustomFunctionInvokerTests {
 	 */
 	@Test
 	void customImperativeResultHandling() {
-		FunctionInvoker<String, String> invoker = new FunctionInvoker<String, String>(TestFunctionsConfig.class) {
+		FunctionInvoker<String, String> invoker = new FunctionInvoker<>(TestFunctionsConfig.class) {
 			@Override
 			protected String postProcessImperativeFunctionResult(String rawInputs, Object functionInputs,
 				Object functionResult, FunctionInvocationWrapper function, ExecutionContext executionContext
@@ -99,7 +99,7 @@ class CustomFunctionInvokerTests {
 	 */
 	@Test
 	void customReactiveMonoResultHandling() {
-		FunctionInvoker<String, String> invoker = new FunctionInvoker<String, String>(TestFunctionsConfig.class) {
+		FunctionInvoker<String, String> invoker = new FunctionInvoker<>(TestFunctionsConfig.class) {
 			@Override
 			protected String postProcessMonoFunctionResult(String rawInputs, Object functionInputs, Mono<?> functionResult,
 				FunctionInvocationWrapper function, ExecutionContext executionContext
@@ -133,7 +133,7 @@ class CustomFunctionInvokerTests {
 	 */
 	@Test
 	void customReactiveFluxResultHandling() {
-		FunctionInvoker<List<String>, String> invoker = new FunctionInvoker<List<String>, String>(TestFunctionsConfig.class) {
+		FunctionInvoker<List<String>, String> invoker = new FunctionInvoker<>(TestFunctionsConfig.class) {
 			@Override
 			protected String postProcessFluxFunctionResult(List<String> rawInputs, Object functionInputs,
 				Flux<?> functionResult, FunctionInvocationWrapper function, ExecutionContext executionContext
@@ -184,17 +184,17 @@ class CustomFunctionInvokerTests {
 
 		@Bean
 		public Function<String, String> imperativeUppercase() {
-			return (s) -> s.toUpperCase();
+			return s -> s.toUpperCase();
 		}
 
 		@Bean
 		public Function<Mono<String>, Mono<String>> reactiveMonoUppercase() {
-			return (m) -> m.map(String::toUpperCase);
+			return m -> m.map(String::toUpperCase);
 		}
 
 		@Bean
 		public Function<Flux<String>, Flux<String>> reactiveFluxUppercase() {
-			return (f) -> f.map(String::toUpperCase);
+			return f -> f.map(String::toUpperCase);
 		}
 
 	}

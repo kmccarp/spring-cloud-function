@@ -66,8 +66,7 @@ public class MessageRoutingCallbackTests {
 		this.context = new SpringApplicationBuilder(configClass)
 				.run("--logging.level.org.springframework.cloud.function=DEBUG",
 						"--spring.main.lazy-initialization=true");
-		FunctionCatalog catalog = context.getBean(FunctionCatalog.class);
-		return catalog;
+		return context.getBean(FunctionCatalog.class);
 	}
 
 	@EnableAutoConfiguration

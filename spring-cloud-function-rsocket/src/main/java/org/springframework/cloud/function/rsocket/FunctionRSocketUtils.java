@@ -71,7 +71,7 @@ final class FunctionRSocketUtils {
 		if (!StringUtils.hasText(acceptContentType)) {
 			FunctionInvocationWrapper function = functionCatalog.lookup(functionDefinition);
 			Type outputType = function.getOutputType();
-			acceptContentType = (outputType instanceof Class && String.class.isAssignableFrom((Class<?>) outputType))
+			acceptContentType = outputType instanceof Class && String.class.isAssignableFrom((Class<?>) outputType)
 					? MimeTypeUtils.TEXT_PLAIN_VALUE : MimeTypeUtils.APPLICATION_JSON_VALUE;
 		}
 
@@ -102,7 +102,7 @@ final class FunctionRSocketUtils {
 				String forwardingUrl = functionToRSocketDefinition[1];
 				Builder rsocketRequesterBuilder = applicationContext.getBean(Builder.class);
 
-				RSocketRequester rsocketRequester = (WS_URI_PATTERN.matcher(forwardingUrl).matches())
+				RSocketRequester rsocketRequester = WS_URI_PATTERN.matcher(forwardingUrl).matches()
 						? rsocketRequesterBuilder.websocket(URI.create(forwardingUrl))
 						: rsocketRequesterBuilder.tcp(hostPort[0], Integer.parseInt(hostPort[1]));
 
@@ -122,12 +122,12 @@ final class FunctionRSocketUtils {
 		messageMap.put(PAYLOAD, message.getPayload());
 		Map<String, Object> headers = new HashMap<>();
 		for (String key : message.getHeaders().keySet()) {
-			if (key.equals("lookupDestination") ||
-					key.equals("reconciledLookupDestination") ||
+			if ("lookupDestination".equals(key) ||
+					"reconciledLookupDestination".equals(key) ||
 					key.equals(MessageHeaders.CONTENT_TYPE)) {
 				headers.put(key, message.getHeaders().get(key).toString());
 			}
-			else if (!key.equals("rsocketRequester")) {
+			else if (!"rsocketRequester".equals(key)) {
 				headers.put(key, message.getHeaders().get(key));
 			}
 		}
